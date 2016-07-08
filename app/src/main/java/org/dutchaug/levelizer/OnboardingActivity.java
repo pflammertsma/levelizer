@@ -22,15 +22,26 @@ public class OnboardingActivity extends AppCompatActivity {
     private TextView mDebugInfoTextView;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
+        @SuppressWarnings("SimplifiableIfStatement")
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             if (mDebugInfoTextView != null) {
+                boolean leveled;
+                // check which axis we need to investigate (one has ~9.81 and has ~0)
+                if (sensorEvent.values[1] > 2) {
+                    leveled = Math.abs(sensorEvent.values[0]) < 0.5;
+                } else if (sensorEvent.values[0] > 2) {
+                    leveled = Math.abs(sensorEvent.values[1]) < 0.5;
+                } else {
+                    leveled = false;
+                }
                 mDebugInfoTextView.setText(String.format(Locale.US,
-                        "%s\n\n[0]: %.6f\n[1]: %.6f\n[2]: %.6f\n",
+                        "%s\n\n[0]: %.6f\n[1]: %.6f\n[2]: %.6f\n\nLeveled: %b",
                         mSensorName == null ? "Unknown sensor" : mSensorName,
                         sensorEvent.values[0],
                         sensorEvent.values[1],
-                        sensorEvent.values[2]));
+                        sensorEvent.values[2],
+                        leveled));
             }
         }
 

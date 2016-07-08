@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.dutchaug.levelizer"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.dutchaug.levelizer">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".LevelizerApp"
@@ -12,9 +14,9 @@
 
         <activity android:name=".OnboardingActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -22,11 +24,11 @@
             android:name=".CameraDetectionService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService"/>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
         </service>
 
-        <service android:name=".LevelizerService"/>
+        <service android:name=".LevelizerService" />
 
     </application>
 
