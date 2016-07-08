@@ -21,14 +21,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            tools:text="@string/onboarding_title" />
+            android:text="@string/onboarding_title" />
 
         <TextView
             android:id="@+id/onboarding_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            tools:text="@string/onboarding_description" />
+            android:text="@string/onboarding_description" />
 
             <TextView
                 android:layout_marginTop="16dp"
