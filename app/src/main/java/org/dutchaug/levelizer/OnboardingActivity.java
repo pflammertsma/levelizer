@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -56,6 +55,21 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
         mDebugInfoTextView = (TextView) findViewById(R.id.sensor_info);
+
+        findViewById(R.id.onboarding_enable_btn)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                        //startActivityForResult(i, 1337);
+                        startActivity(i);
+                    }
+                });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -68,25 +82,15 @@ public class OnboardingActivity extends AppCompatActivity {
             }
         }
         startService(new Intent(this, LevelizerService.class));
-
-        Button enableButton = (Button) findViewById(R.id.onboarding_enable_btn);
-        enableButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                //startActivityForResult(i, 1337);
-                startActivity(i);
-            }
-        });
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             sensorManager.unregisterListener(mSensorEventListener);
         }
         stopService(new Intent(this, LevelizerService.class));
+        super.onStop();
     }
 }
