@@ -43,7 +43,9 @@ public class CameraDetectionService extends AccessibilityService {
         Log.d(TAG, "onAccessibilityEvent: " + event);
 
         if (packageName != null) {
-            if (CAMERA_APPS_LIST.contains(packageName)) {
+            if (packageName.equals("com.android.systemui")) {
+                // Do nothing
+            } else if (CAMERA_APPS_LIST.contains(packageName)) {
                 Log.d(TAG, "camera app: " + packageName);
                 startLevelizer();
             } else {
