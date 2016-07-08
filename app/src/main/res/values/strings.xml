@@ -4,4 +4,5 @@
     <string name="whitelist_explanation">Add your camera apps to the Whitelist to make sure Levelizer works with your camera app</string>
     <string name="whitelist_is_empty">Whitelist is empty</string>
     <string name="onboarding_whitelisting">Whitelisting</string>
+    <string name="title_activity_testy">Testy</string>
 </resources>

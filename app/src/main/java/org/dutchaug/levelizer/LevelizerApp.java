@@ -12,6 +12,7 @@ public class LevelizerApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        //https://github.com/Pixplicity/EasyPreferences
         // Initialize the Prefs class
         new Prefs.Builder()
                 .setContext(this)

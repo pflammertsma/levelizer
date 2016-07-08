@@ -13,7 +13,7 @@ import java.util.List;
 public class CameraDetectionService extends AccessibilityService {
 
     private static final String TAG = CameraDetectionService.class.getSimpleName();
-    private static final String[] CAMERA_APPS_ARRAY = new String[]{
+    public static final String[] CAMERA_APPS_ARRAY = new String[]{
             "com.motorola.camera",
             "com.google.vr.cyclops",
             "com.flavionet.android.camera.pro",

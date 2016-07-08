@@ -16,12 +16,21 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
-        Button enableButton = (Button) findViewById(R.id.onboarding_enable_btn);
-        enableButton.setOnClickListener(new View.OnClickListener() {
+        Button enableBtn = (Button) findViewById(R.id.onboarding_enable_btn);
+        enableBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 //startActivityForResult(i, 1337);
+                startActivity(i);
+            }
+        });
+
+        Button whitelistingBtn = (Button) findViewById(R.id.onboarding_whitelist_btn);
+        whitelistingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), WhitelistActivity.class);
                 startActivity(i);
             }
         });
