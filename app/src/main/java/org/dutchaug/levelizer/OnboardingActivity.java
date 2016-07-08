@@ -9,8 +9,6 @@ import android.widget.Button;
 
 public class OnboardingActivity extends AppCompatActivity {
 
-    private String mSensorName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,5 +23,8 @@ public class OnboardingActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        Button whitelisting = (Button) findViewById(R.id.onboarding_whitelist_btn);
+
     }
 }
