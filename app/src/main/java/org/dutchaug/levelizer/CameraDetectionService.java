@@ -2,6 +2,7 @@ package org.dutchaug.levelizer;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.Intent;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -18,6 +19,12 @@ public class CameraDetectionService extends AccessibilityService {
             "com.flavionet.android.camera.pro",
             };
     private static final List<String> CAMERA_APPS_LIST = Arrays.asList(CAMERA_APPS_ARRAY);
+
+    /**
+     * It'd be nice if this worked, but we can't detect when the camera app is closed.
+     */
+    private static final boolean FILTER_WITH_CAMERA_WHITELIST = false;
+
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -54,13 +61,14 @@ public class CameraDetectionService extends AccessibilityService {
         // Set the type of events that this service wants to listen to.  Others
         // won't be passed to this service.
         info.eventTypes = AccessibilityEvent.TYPE_WINDOWS_CHANGED
-                | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-                | AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED;
+                | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
 
-        // If you only want this service to work with specific applications, set their
-        // package names here.  Otherwise, when the service is activated, it will listen
-        // to events from all applications.
-        info.packageNames = CAMERA_APPS_ARRAY;
+        if (FILTER_WITH_CAMERA_WHITELIST) {
+            // If you only want this service to work with specific applications, set their
+            // package names here.  Otherwise, when the service is activated, it will listen
+            // to events from all applications.
+            info.packageNames = CAMERA_APPS_ARRAY;
+        }
 
         // Set the type of feedback your service will provide.
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
@@ -79,9 +87,13 @@ public class CameraDetectionService extends AccessibilityService {
     }
 
     private void startLevelizer() {
+        Intent serviceIntent = new Intent(this, LevelizerService.class);
+        startService(serviceIntent);
     }
 
     private void stopLevelizer() {
+        Intent serviceIntent = new Intent(this, LevelizerService.class);
+        stopService(serviceIntent);
     }
 
 }
