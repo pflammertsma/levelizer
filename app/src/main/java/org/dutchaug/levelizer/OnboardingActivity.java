@@ -1,7 +1,6 @@
 package org.dutchaug.levelizer;
 
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -19,26 +18,15 @@ public class OnboardingActivity extends AppCompatActivity {
     private TextView mDebugInfoTextView;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
-        @SuppressWarnings("SimplifiableIfStatement")
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             if (mDebugInfoTextView != null) {
-                boolean leveled;
-                // check which axis we need to investigate (one has ~9.81 and has ~0)
-                if (sensorEvent.values[1] > 2) {
-                    leveled = Math.abs(sensorEvent.values[0]) < 0.5;
-                } else if (sensorEvent.values[0] > 2) {
-                    leveled = Math.abs(sensorEvent.values[1]) < 0.5;
-                } else {
-                    leveled = false;
-                }
                 mDebugInfoTextView.setText(String.format(Locale.US,
-                        "%s\n\n[0]: %.6f\n[1]: %.6f\n[2]: %.6f\n\nLeveled: %b",
+                        "%s\n\n[0]: %.6f\n[1]: %.6f\n[2]: %.6f\n",
                         mSensorName == null ? "Unknown sensor" : mSensorName,
                         sensorEvent.values[0],
                         sensorEvent.values[1],
-                        sensorEvent.values[2],
-                        leveled));
+                        sensorEvent.values[2]));
             }
         }
 
@@ -67,6 +55,15 @@ public class OnboardingActivity extends AppCompatActivity {
         startService(new Intent(this, LevelizerService.class));
     }
 
+        Button enableButton = (Button) findViewById(R.id.onboarding_enable_btn);
+        enableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i  = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                //startActivityForResult(i, 1337);
+                startActivity(i);
+            }
+        });
     @Override
     protected void onDestroy() {
         super.onDestroy();
