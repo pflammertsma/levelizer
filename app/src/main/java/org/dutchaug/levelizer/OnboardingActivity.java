@@ -1,11 +1,6 @@
 package org.dutchaug.levelizer;
 
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.Locale;
+import android.widget.Button;
 
 public class OnboardingActivity extends AppCompatActivity {
 
