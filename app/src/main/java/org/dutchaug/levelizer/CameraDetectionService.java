@@ -17,6 +17,9 @@ public class CameraDetectionService extends AccessibilityService {
             "com.motorola.camera",
             "com.google.vr.cyclops",
             "com.flavionet.android.camera.pro",
+            "com.lge.camera",
+            "net.sourceforge.opencamera",
+            "com.google.android.GoogleCamera"
             };
     private static final List<String> CAMERA_APPS_LIST = Arrays.asList(CAMERA_APPS_ARRAY);
 
