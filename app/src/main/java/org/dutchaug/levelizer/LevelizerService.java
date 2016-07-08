@@ -8,11 +8,16 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
 public class LevelizerService extends Service {
+
+    private boolean mIsVibrating = false;
+
+    private Vibrator mVibrator;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
         @SuppressWarnings("SimplifiableIfStatement")
@@ -21,13 +26,22 @@ public class LevelizerService extends Service {
             boolean leveled;
             // check which axis we need to investigate (one has ~9.81 and has ~0)
             if (sensorEvent.values[1] > 2) {
-                leveled = Math.abs(sensorEvent.values[0]) < 0.5;
+                leveled = Math.abs(sensorEvent.values[0]) < 0.7;
             } else if (sensorEvent.values[0] > 2) {
-                leveled = Math.abs(sensorEvent.values[1]) < 0.5;
+                leveled = Math.abs(sensorEvent.values[1]) < 0.7;
             } else {
                 leveled = false;
             }
             Log.d(LevelizerService.class.getSimpleName(), String.format("Leveled: %b", leveled));
+            if (!leveled) {
+                if (!mIsVibrating) {
+                    mIsVibrating = true;
+                    mVibrator.vibrate(new long[]{0, 200, 0}, 0);
+                }
+            } else {
+                mIsVibrating = false;
+                mVibrator.cancel();
+            }
         }
 
         @Override
@@ -45,6 +59,7 @@ public class LevelizerService extends Service {
     public void onCreate() {
         super.onCreate();
         Toast.makeText(this, "Levelizer started", Toast.LENGTH_SHORT).show();
+        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -61,6 +76,9 @@ public class LevelizerService extends Service {
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             sensorManager.unregisterListener(mSensorEventListener);
+        }
+        if (mVibrator != null) {
+            mVibrator.cancel();
         }
         super.onDestroy();
     }
