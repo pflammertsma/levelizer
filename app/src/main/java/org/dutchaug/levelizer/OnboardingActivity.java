@@ -1,6 +1,7 @@
 package org.dutchaug.levelizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -18,15 +19,26 @@ public class OnboardingActivity extends AppCompatActivity {
     private TextView mDebugInfoTextView;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
+        @SuppressWarnings("SimplifiableIfStatement")
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             if (mDebugInfoTextView != null) {
+                boolean leveled;
+                // check which axis we need to investigate (one has ~9.81 and has ~0)
+                if (sensorEvent.values[1] > 2) {
+                    leveled = Math.abs(sensorEvent.values[0]) < 0.5;
+                } else if (sensorEvent.values[0] > 2) {
+                    leveled = Math.abs(sensorEvent.values[1]) < 0.5;
+                } else {
+                    leveled = false;
+                }
                 mDebugInfoTextView.setText(String.format(Locale.US,
-                        "%s\n\n[0]: %.6f\n[1]: %.6f\n[2]: %.6f\n",
+                        "%s\n\n[0]: %.6f\n[1]: %.6f\n[2]: %.6f\n\nLeveled: %b",
                         mSensorName == null ? "Unknown sensor" : mSensorName,
                         sensorEvent.values[0],
                         sensorEvent.values[1],
-                        sensorEvent.values[2]));
+                        sensorEvent.values[2],
+                        leveled));
             }
         }
 
@@ -43,7 +55,7 @@ public class OnboardingActivity extends AppCompatActivity {
         mDebugInfoTextView = (TextView) findViewById(R.id.sensor_info);
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
-            Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+            Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (rotationSensor != null) {
                 mSensorName = String.format("%s (%s)",
                         rotationSensor.getName(),
@@ -52,16 +64,16 @@ public class OnboardingActivity extends AppCompatActivity {
                         SensorManager.SENSOR_DELAY_NORMAL);
             }
         }
+        startService(new Intent(this, LevelizerService.class));
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mDebugInfoTextView != null) {
-            SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            if (sensorManager != null) {
-                sensorManager.unregisterListener(mSensorEventListener);
-            }
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(mSensorEventListener);
         }
+        stopService(new Intent(this, LevelizerService.class));
     }
 }
