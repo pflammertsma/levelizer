@@ -36,7 +36,7 @@ public class LevelizerService extends Service {
             if (!leveled) {
                 if (!mIsVibrating) {
                     mIsVibrating = true;
-                    mVibrator.vibrate(new long[]{0, 200, 0}, 0);
+                    mVibrator.vibrate(new long[]{0, 200, 200}, 0);
                 }
             } else {
                 mIsVibrating = false;
