@@ -13,8 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".OnboardingActivity"
-            android:label="@string/onboarding_title">
+            android:name=".OnboardingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

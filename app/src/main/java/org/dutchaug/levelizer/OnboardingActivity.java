@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,6 +21,15 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private TextView mStatusTextView;
     private Button mEnableButton;
+
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            checkAccessibilityStatus();
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,13 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         checkAccessibilityStatus();
+        mHandler.postDelayed(mRunnable, 1000);
+    }
+
+    @Override
+    protected void onStop() {
+        mHandler.removeCallbacks(mRunnable);
+        super.onStop();
     }
 
     private void checkAccessibilityStatus() {
