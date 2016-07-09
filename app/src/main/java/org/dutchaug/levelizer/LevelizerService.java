@@ -61,13 +61,7 @@ public class LevelizerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getBooleanExtra(EXTRA_STOP, false)) {
-            if (true) {
-                // FIXME possibly not needed
-                Intent serviceIntent = new Intent(this, LevelizerService.class);
-                stopService(serviceIntent);
-            } else {
-                stopSelf();
-            }
+            stopSelf();
             return START_NOT_STICKY;
         }
         return START_STICKY;

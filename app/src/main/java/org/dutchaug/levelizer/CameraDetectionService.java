@@ -13,7 +13,7 @@ import java.util.List;
 public class CameraDetectionService extends AccessibilityService {
 
     private static final String TAG = CameraDetectionService.class.getSimpleName();
-    public static final String[] CAMERA_APPS_ARRAY = new String[]{
+    private static final String[] CAMERA_APPS_ARRAY = new String[]{
             "com.motorola.camera",
             "com.google.vr.cyclops",
             "com.flavionet.android.camera.pro",
@@ -29,6 +29,10 @@ public class CameraDetectionService extends AccessibilityService {
     private static final boolean FILTER_WITH_CAMERA_WHITELIST = false;
     private String mLastPackageName;
 
+
+    public static List<String> getCameraApps() {
+        return CAMERA_APPS_LIST;
+    }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
