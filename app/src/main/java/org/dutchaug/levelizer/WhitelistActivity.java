@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -50,11 +48,12 @@ public class WhitelistActivity extends AppCompatActivity {
         mAdapter = new AppsListAdapter(this);
 
         List<String> whitelistPackageNames = new ArrayList<String>();
-        //get defaults
+        // Fill the preset ones
         whitelistPackageNames.addAll(CameraDetectionService.getCameraApps());
-        Set<String> packageNamesFromPreferences = Prefs.getOrderedStringSet("whitelist", null);
-        if (packageNamesFromPreferences != null) {
-            whitelistPackageNames.addAll(packageNamesFromPreferences);
+        // Also add the user ones
+        Set<String> userPackageNames = Prefs.getOrderedStringSet("whitelist", null);
+        if (userPackageNames != null) {
+            whitelistPackageNames.addAll(userPackageNames);
         }
         mAdapter.setData(whitelistPackageNames);
 
@@ -90,7 +89,7 @@ public class WhitelistActivity extends AppCompatActivity {
     }
 
     public void showAddApp() {
-
+        startActivity(new Intent(this, AppListActivity.class));
     }
 
     @Override

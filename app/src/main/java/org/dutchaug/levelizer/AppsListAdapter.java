@@ -11,36 +11,28 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pixplicity.easyprefs.library.Prefs;
-
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
-/**
- * Created by FrankkieNL on 7/9/2016.
- */
-class AppsListAdapter extends BaseAdapter {
 
-    List<String> mPackageNames = new ArrayList<String>();
+public class AppsListAdapter extends BaseAdapter {
+
+    private final LayoutInflater mLayoutInflater;
+    private List<String> mPackageNames = new ArrayList<String>();
     private PackageManager mPackageManager;
-    private Context context;
 
     public AppsListAdapter(Context context) {
-        this.context = context;
+        mLayoutInflater = LayoutInflater.from(context);
         mPackageManager = context.getPackageManager();
-
     }
 
     public void setData(List<String> packageNames){
-        this.mPackageNames = packageNames;
+        mPackageNames = packageNames;
     }
 
     @Override
     public int getCount() {
-        int count = mPackageNames.size();
-        return count;
+        return mPackageNames.size();
     }
 
     @Override
@@ -56,9 +48,7 @@ class AppsListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
-            //does this leak the activity on config change??
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
-            view = layoutInflater.inflate(R.layout.listitem, viewGroup, false);
+            view = mLayoutInflater.inflate(R.layout.listitem, viewGroup, false);
             ListItemViewHolder vh = new ListItemViewHolder();
             vh.imageView = (ImageView) view.findViewById(R.id.listiem_icon);
             vh.firstLine = (TextView) view.findViewById(R.id.listitem_firstline);
@@ -94,4 +84,5 @@ class AppsListAdapter extends BaseAdapter {
         TextView firstLine;
         TextView secondLine;
     }
+
 }

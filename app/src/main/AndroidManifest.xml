@@ -23,6 +23,9 @@
         <activity
             android:name=".WhitelistActivity"
             android:label="@string/camera_whitelist"/>
+        <activity
+            android:name=".AppListActivity"
+            android:label="@string/app_list"/>
 
         <service
             android:name=".CameraDetectionService"

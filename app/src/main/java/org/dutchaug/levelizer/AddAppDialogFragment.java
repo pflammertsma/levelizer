@@ -10,9 +10,6 @@ import android.support.v4.app.DialogFragment;
 
 import java.util.List;
 
-/**
- * Created by FrankkieNL on 7/9/2016.
- */
 public class AddAppDialogFragment extends DialogFragment {
 
     PackageManager mPackageManager;

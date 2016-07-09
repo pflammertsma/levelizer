@@ -17,4 +17,6 @@
     <string name="camera_whitelist">Camera whitelist</string>
     <string name="whitelist_is_empty">Whitelist is empty</string>
     <string name="not_installed">This app is not installed</string>
+    <string name="no_apps_found">No apps found.</string>
+    <string name="app_list">App list</string>
 </resources>
