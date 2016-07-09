@@ -12,4 +12,5 @@
     <string name="disabled">Disabled</string>
     <string name="onboarding_description">Levelizer needs Accesibility permission to work. Please enable it now.\n\nIf it does not work with your Camera app, please add it to the whitelist.</string>
     <string name="status">Status:</string>
+    <string name="not_installed">This app is not installed</string>
 </resources>
