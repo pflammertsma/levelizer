@@ -2,7 +2,10 @@ package org.dutchaug.levelizer;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -20,18 +23,41 @@ public class CameraDetectionService extends AccessibilityService {
             "com.lge.camera",
             "net.sourceforge.opencamera",
             "com.google.android.GoogleCamera"
-            };
+    };
     private static final List<String> CAMERA_APPS_LIST = Arrays.asList(CAMERA_APPS_ARRAY);
 
     /**
      * It'd be nice if this worked, but we can't detect when the camera app is closed.
      */
     private static final boolean FILTER_WITH_CAMERA_WHITELIST = false;
+    public static final String PACKAGE_SYSTEMUI = "com.android.systemui";
     private String mLastPackageName;
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: " + intent.getAction());
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                if (mLastPackageName != null && !mLastPackageName.equals(PACKAGE_SYSTEMUI)) {
+                    // Unregister the last app
+                    mLastPackageName = null;
+                }
+                stopLevelizer();
+            }
+        }
+    };
 
 
     public static List<String> getCameraApps() {
         return CAMERA_APPS_LIST;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -48,7 +74,7 @@ public class CameraDetectionService extends AccessibilityService {
         Log.d(TAG, "onAccessibilityEvent: " + event);
 
         if (packageName != null) {
-            if (packageName.equals("com.android.systemui")) {
+            if (packageName.equals(PACKAGE_SYSTEMUI)) {
                 // Ignore when the user navigates to the SystemUI
                 pauseLeveler();
                 return;
@@ -69,6 +95,12 @@ public class CameraDetectionService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
+    }
+
+    @Override
+    public void onDestroy() {
+        unregisterReceiver(mBroadcastReceiver);
+        super.onDestroy();
     }
 
     @Override
