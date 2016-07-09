@@ -16,6 +16,8 @@ import java.util.List;
 
 public class OnboardingActivity extends AppCompatActivity {
 
+    private static final String TAG = OnboardingActivity.class.getSimpleName();
+
     private TextView mStatusTextView;
     private Button mEnableButton;
 
@@ -69,28 +71,18 @@ public class OnboardingActivity extends AppCompatActivity {
                 }
             }
 
-            if (!enabled) {
-                handleAccessibilityDisabled();
-            } else {
-                handleAccessibilityEnabled();
-            }
+            onAccessibilityStatus(enabled);
         } else {
-            handleAccessibilityDisabled();
+            onAccessibilityStatus(false);
         }
     }
 
-    private void handleAccessibilityEnabled() {
-        Log.d(OnboardingActivity.class.getSimpleName(), "AS enabled");
-        mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.enabled));
-        mEnableButton.setText(R.string.onboarding_all_done);
-        mEnableButton.setEnabled(false);
-    }
-
-    private void handleAccessibilityDisabled() {
-        Log.d(OnboardingActivity.class.getSimpleName(), "AS disabled");
-        mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.disabled));
-        mEnableButton.setText(R.string.enable);
-        mEnableButton.setEnabled(true);
+    private void onAccessibilityStatus(boolean enabled) {
+        Log.d(TAG, "accessibility service " + (enabled ? "enabled" : "disabled"));
+        mStatusTextView.setText(getString(R.string.status,
+                getString(enabled ? R.string.enabled : R.string.disabled)));
+        mEnableButton.setText(enabled ? R.string.onboarding_all_done : R.string.enable);
+        mEnableButton.setEnabled(!enabled);
     }
 
 }
