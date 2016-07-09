@@ -1,6 +1,8 @@
 Levelizer
 ===========
 
+[![Build Status](https://travis-ci.org/pflammertsma/levelizer.svg?branch=master)](https://travis-ci.org/pflammertsma/levelizer)
+
 Levelizer is an open source Android app that gives you haptic feedback when you're attempting to take an unlevel photo.
 
 You can use your favorite camera app; Levelizer runs in the background!
