@@ -61,7 +61,13 @@ public class LevelizerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getBooleanExtra(EXTRA_STOP, false)) {
-            stopSelf();
+            if (true) {
+                // FIXME possibly not needed
+                Intent serviceIntent = new Intent(this, LevelizerService.class);
+                stopService(serviceIntent);
+            } else {
+                stopSelf();
+            }
             return START_NOT_STICKY;
         }
         return START_STICKY;
@@ -70,6 +76,10 @@ public class LevelizerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(this, "Levelizer started", Toast.LENGTH_SHORT).show();
+        }
 
         // Display an ongoing notification
         Intent intent = new Intent(this, LevelizerService.class);
@@ -90,7 +100,6 @@ public class LevelizerService extends Service {
         // Start this service in the foreground on the notification
         startForeground(NOTIFICATION_ID, notification);
 
-        Toast.makeText(this, "Levelizer started", Toast.LENGTH_SHORT).show();
         mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
@@ -104,7 +113,9 @@ public class LevelizerService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Levelizer stopped", Toast.LENGTH_SHORT).show();
+        if (BuildConfig.DEBUG) {
+            Toast.makeText(this, "Levelizer stopped", Toast.LENGTH_SHORT).show();
+        }
 
         // Cancel the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
