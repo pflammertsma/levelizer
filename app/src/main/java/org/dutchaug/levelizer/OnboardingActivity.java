@@ -4,20 +4,30 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.List;
 
-public class OnboardingActivity extends AppCompatActivity {
+public class OnboardingActivity extends FragmentActivity {
 
-    private TextView mStatusTextView;
+    private static final String TAG = OnboardingActivity.class.getSimpleName();
+
     private Button mEnableButton;
+
+    private Handler mHandler = new Handler();
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            checkAccessibilityStatus();
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +51,19 @@ public class OnboardingActivity extends AppCompatActivity {
                         startActivity(i);
                     }
                 });
-
-        mStatusTextView = (TextView) findViewById(R.id.onboarding_status);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         checkAccessibilityStatus();
+        mHandler.postDelayed(mRunnable, 1000);
+    }
+
+    @Override
+    protected void onStop() {
+        mHandler.removeCallbacks(mRunnable);
+        super.onStop();
     }
 
     private void checkAccessibilityStatus() {
@@ -69,28 +84,16 @@ public class OnboardingActivity extends AppCompatActivity {
                 }
             }
 
-            if (!enabled) {
-                handleAccessibilityDisabled();
-            } else {
-                handleAccessibilityEnabled();
-            }
+            onAccessibilityStatus(enabled);
         } else {
-            handleAccessibilityDisabled();
+            onAccessibilityStatus(false);
         }
     }
 
-    private void handleAccessibilityEnabled() {
-        Log.d(OnboardingActivity.class.getSimpleName(), "AS enabled");
-        mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.enabled));
-        mEnableButton.setText(R.string.onboarding_all_done);
-        mEnableButton.setEnabled(false);
-    }
-
-    private void handleAccessibilityDisabled() {
-        Log.d(OnboardingActivity.class.getSimpleName(), "AS disabled");
-        mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.disabled));
-        mEnableButton.setText(R.string.enable);
-        mEnableButton.setEnabled(true);
+    private void onAccessibilityStatus(boolean enabled) {
+        Log.d(TAG, "accessibility service " + (enabled ? "enabled" : "disabled"));
+        mEnableButton.setText(enabled ? R.string.onboarding_all_done : R.string.enable);
+        mEnableButton.setEnabled(!enabled);
     }
 
 }

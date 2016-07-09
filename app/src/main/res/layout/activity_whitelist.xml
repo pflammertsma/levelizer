@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,27 +10,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="@string/whitelist_explanation" />
+            android:padding="16dp"
+            android:text="@string/whitelist_explanation"/>
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-        </ListView>
+            android:layout_weight="1"/>
+
         <TextView
-            android:visibility="gone"
             android:id="@android:id/empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/whitelist_is_empty" />
+            android:text="@string/whitelist_is_empty"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -40,5 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add" />
+        android:src="@drawable/ic_add"/>
+
 </android.support.design.widget.CoordinatorLayout>

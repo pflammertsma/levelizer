@@ -1,15 +1,20 @@
 <resources>
     <string name="app_name">Levelizer</string>
-    <string name="enable">Enable</string>
-    <string name="whitelist_explanation">Add your camera apps to the Whitelist to make sure Levelizer works with your camera app</string>
-    <string name="whitelist_is_empty">Whitelist is empty</string>
-    <string name="onboarding_whitelisting">Whitelisting</string>
+
     <string name="notification_text">Levelizer is running; tap to stop</string>
+
     <string name="onboarding_title">Onboarding</string>
     <string name="onboarding_all_done">All done!</string>
+    <string name="onboarding_accessibility">Levelizer needs Accesibility permission to work. Please enable it now.</string>
+
+    <string name="enable">Enable accessibility service</string>
+    <string name="status">Status: %1$s</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
-    <string name="onboarding_description">Levelizer needs Accesibility permission to work. Please enable it now.\n\nIf it does not work with your Camera app, please add it to the whitelist.</string>
-    <string name="status">Status:</string>
+
+    <string name="onboarding_whitelist">Is Levelizer not working with you camera app? Add it to the whitelist.</string>
+    <string name="whitelist_explanation">Add camera apps to the whitelist to make sure Levelizer works with them.</string>
+    <string name="camera_whitelist">Camera whitelist</string>
+    <string name="whitelist_is_empty">Whitelist is empty</string>
     <string name="not_installed">This app is not installed</string>
 </resources>
