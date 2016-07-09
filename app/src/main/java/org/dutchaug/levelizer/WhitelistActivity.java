@@ -1,6 +1,5 @@
 package org.dutchaug.levelizer;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -9,8 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,17 +32,24 @@ public class WhitelistActivity extends AppCompatActivity {
     ListView mListView;
     TextView mListEmpty;
     AppsListAdapter mAdapter;
-    PackageManager mPackageManager;
+
+    private PackageManager mPackageManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPackageManager = getPackageManager();
-        initUI();
-    }
-
-    private void initUI() {
         setContentView(R.layout.activity_whitelist);
+        setTitle(R.string.camera_whitelist);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+
+        mPackageManager = getPackageManager();
+
         mListView = (ListView) findViewById(android.R.id.list);
         mListEmpty = (TextView) findViewById(android.R.id.empty);
         mAdapter = new AppsListAdapter();
@@ -88,6 +96,16 @@ public class WhitelistActivity extends AppCompatActivity {
             //Because we have a built-in list of whitelisted app.
             mListEmpty.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class AppsListAdapter extends BaseAdapter {

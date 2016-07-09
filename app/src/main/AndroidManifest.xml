@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".WhitelistActivity"/>
+        <activity
+            android:name=".WhitelistActivity"
+            android:label="@string/camera_whitelist"/>
 
         <service
             android:name=".CameraDetectionService"

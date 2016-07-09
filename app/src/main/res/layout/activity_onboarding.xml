@@ -17,19 +17,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="192dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_launcher_large"/>
+
             <TextView
                 android:id="@+id/onboarding_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_accessibility"/>
-
-            <TextView
-                android:id="@+id/onboarding_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:textSize="20sp"
-                tools:text="[onboarding status]"/>
+                android:text="@string/onboarding_accessibility"/>
 
             <Button
                 android:id="@+id/onboarding_enable_btn"
