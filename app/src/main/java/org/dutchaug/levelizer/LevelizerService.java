@@ -19,8 +19,18 @@ import android.widget.Toast;
 
 public class LevelizerService extends Service {
 
+    private static final String TAG = LevelizerService.class.getSimpleName();
+
     private static final int REQUEST_CODE = 1000;
-    public static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 1;
+
+    private static final double LEVEL_THRESHOLD = 0.6;
+    private static final int GRAVITY_THRESHOLD = 2;
+
+    private static final int FREQUENCY_LOW = 100;
+    private static final int FREQUENCY_MID = 300;
+    private static final int FREQUENCY_HIGH = 1000;
+
     private static final String EXTRA_STOP = "stop";
 
     private boolean mIsVibrating = false;
@@ -31,20 +41,28 @@ public class LevelizerService extends Service {
         @SuppressWarnings("SimplifiableIfStatement")
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            boolean leveled;
+            float amountOffLevel = 0f;
             // check which axis we need to investigate (one has ~9.81 and has ~0)
-            if (sensorEvent.values[1] > 2) {
-                leveled = Math.abs(sensorEvent.values[0]) < 0.7;
-            } else if (sensorEvent.values[0] > 2) {
-                leveled = Math.abs(sensorEvent.values[1]) < 0.7;
-            } else {
-                leveled = false;
+            if (sensorEvent.values[1] > GRAVITY_THRESHOLD) {
+                // This suggests axis with index 1 is pointing down
+                amountOffLevel = Math.abs(sensorEvent.values[0]);
+            } else if (sensorEvent.values[0] > GRAVITY_THRESHOLD) {
+                // This suggests axis with index 0 is pointing down
+                amountOffLevel = Math.abs(sensorEvent.values[1]);
             }
-            Log.d(LevelizerService.class.getSimpleName(), String.format("Leveled: %b", leveled));
+            boolean leveled = amountOffLevel < LEVEL_THRESHOLD;
+            Log.d(TAG, String.format("Leveled: %b", leveled));
             if (!leveled) {
+                /* TODO we need to change the vibration frequency dynamically, but this isn't so easy :)
+                if (mIsVibrating) {
+                    mVibrator.cancel();
+                }
+                int vibrationPause = (int) Math.max(20, (FREQUENCY_HIGH * Math.min(1f, amountOffLevel / 3f)));
+                */
                 if (!mIsVibrating) {
+                    int vibrationPause = FREQUENCY_MID;
                     mIsVibrating = true;
-                    mVibrator.vibrate(new long[]{0, 200, 200}, 0);
+                    mVibrator.vibrate(new long[]{0, 20, vibrationPause}, 0);
                 }
             } else {
                 mIsVibrating = false;
@@ -101,6 +119,8 @@ public class LevelizerService extends Service {
             if (rotationSensor != null) {
                 sensorManager.registerListener(mSensorEventListener, rotationSensor,
                         SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                // TODO show an error??
             }
         }
     }
