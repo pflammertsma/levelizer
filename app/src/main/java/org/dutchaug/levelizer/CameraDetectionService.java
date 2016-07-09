@@ -13,7 +13,7 @@ import java.util.List;
 public class CameraDetectionService extends AccessibilityService {
 
     private static final String TAG = CameraDetectionService.class.getSimpleName();
-    public static final String[] CAMERA_APPS_ARRAY = new String[]{
+    private static final String[] CAMERA_APPS_ARRAY = new String[]{
             "com.motorola.camera",
             "com.google.vr.cyclops",
             "com.flavionet.android.camera.pro",
@@ -27,7 +27,12 @@ public class CameraDetectionService extends AccessibilityService {
      * It'd be nice if this worked, but we can't detect when the camera app is closed.
      */
     private static final boolean FILTER_WITH_CAMERA_WHITELIST = false;
+    private String mLastPackageName;
 
+
+    public static List<String> getCameraApps() {
+        return CAMERA_APPS_LIST;
+    }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -44,7 +49,13 @@ public class CameraDetectionService extends AccessibilityService {
 
         if (packageName != null) {
             if (packageName.equals("com.android.systemui")) {
-                // Do nothing
+                // Ignore when the user navigates to the SystemUI
+                pauseLeveler();
+                return;
+            } else if (mLastPackageName != null && mLastPackageName.equals(packageName)) {
+                // Ignore when the same app returns; e.g. when the user opens the notification tray
+                resumeLeveler();
+                return;
             } else if (CAMERA_APPS_LIST.contains(packageName)) {
                 Log.d(TAG, "camera app: " + packageName);
                 startLevelizer();
@@ -52,6 +63,7 @@ public class CameraDetectionService extends AccessibilityService {
                 Log.d(TAG, "not a camera app: " + packageName);
                 stopLevelizer();
             }
+            mLastPackageName = packageName;
         }
     }
 
@@ -99,6 +111,14 @@ public class CameraDetectionService extends AccessibilityService {
     private void stopLevelizer() {
         Intent serviceIntent = new Intent(this, LevelizerService.class);
         stopService(serviceIntent);
+    }
+
+    private void pauseLeveler() {
+        // TODO instruct LevelizerService to pause vibration
+    }
+
+    private void resumeLeveler() {
+        // TODO instruct LevelizerService to resume vibration
     }
 
 }
