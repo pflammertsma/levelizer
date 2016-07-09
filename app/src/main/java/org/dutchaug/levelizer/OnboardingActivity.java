@@ -1,18 +1,23 @@
 package org.dutchaug.levelizer;
 
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class OnboardingActivity extends AppCompatActivity {
 
-    TextView mStatusTextView;
-    Button mWhitelistButton;
-    Button mEnableButton;
+    private TextView mStatusTextView;
+    private Button mEnableButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,42 +29,68 @@ public class OnboardingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                //startActivityForResult(i, 1337);
                 startActivity(i);
             }
         });
 
-        mWhitelistButton = (Button) findViewById(R.id.onboarding_whitelist_btn);
-        mWhitelistButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), WhitelistActivity.class);
-                startActivity(i);
-            }
-        });
+        findViewById(R.id.onboarding_whitelist_btn)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(getApplicationContext(), WhitelistActivity.class);
+                        startActivity(i);
+                    }
+                });
 
         mStatusTextView = (TextView) findViewById(R.id.onboarding_status);
-
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        checkEnabled();
+    protected void onStart() {
+        super.onStart();
+        checkAccessibilityStatus();
     }
 
-    public void checkEnabled() {
-        boolean isEnabled = true;
+    private void checkAccessibilityStatus() {
+        AccessibilityManager accessibilityService = (AccessibilityManager)
+                getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (accessibilityService != null) {
+            List<AccessibilityServiceInfo> infos =
+                    accessibilityService.getEnabledAccessibilityServiceList(
+                            AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 
-        if (isEnabled) {
-            mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.enabled));
-            mEnableButton.setText(R.string.onboarding_all_done);
-            mEnableButton.setEnabled(false);
+            boolean enabled = false;
+            if (infos != null) {
+                for (AccessibilityServiceInfo info : infos) {
+                    if (info.getId().contains(CameraDetectionService.class.getSimpleName())) {
+                        enabled = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!enabled) {
+                handleAccessibilityDisabled();
+            } else {
+                handleAccessibilityEnabled();
+            }
         } else {
-            mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.disabled));
-            mEnableButton.setText(R.string.enable);
-            mEnableButton.setEnabled(true);
+            handleAccessibilityDisabled();
         }
     }
+
+    private void handleAccessibilityEnabled() {
+        Log.d(OnboardingActivity.class.getSimpleName(), "AS enabled");
+        mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.enabled));
+        mEnableButton.setText(R.string.onboarding_all_done);
+        mEnableButton.setEnabled(false);
+    }
+
+    private void handleAccessibilityDisabled() {
+        Log.d(OnboardingActivity.class.getSimpleName(), "AS disabled");
+        mStatusTextView.setText(getString(R.string.status) + " " + getString(R.string.disabled));
+        mEnableButton.setText(R.string.enable);
+        mEnableButton.setEnabled(true);
+    }
+
 }
