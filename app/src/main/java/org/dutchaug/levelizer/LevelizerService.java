@@ -19,8 +19,11 @@ import android.widget.Toast;
 
 public class LevelizerService extends Service {
 
+    private static final String TAG = LevelizerService.class.getSimpleName();
+
     private static final int REQUEST_CODE = 1000;
-    public static final int NOTIFICATION_ID = 1;
+    private static final int NOTIFICATION_ID = 1;
+
     private static final String EXTRA_STOP = "stop";
 
     private boolean mIsVibrating = false;
@@ -31,16 +34,14 @@ public class LevelizerService extends Service {
         @SuppressWarnings("SimplifiableIfStatement")
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            boolean leveled;
+            boolean leveled = false;
             // check which axis we need to investigate (one has ~9.81 and has ~0)
             if (sensorEvent.values[1] > 2) {
                 leveled = Math.abs(sensorEvent.values[0]) < 0.7;
             } else if (sensorEvent.values[0] > 2) {
                 leveled = Math.abs(sensorEvent.values[1]) < 0.7;
-            } else {
-                leveled = false;
             }
-            Log.d(LevelizerService.class.getSimpleName(), String.format("Leveled: %b", leveled));
+            Log.d(TAG, String.format("Leveled: %b", leveled));
             if (!leveled) {
                 if (!mIsVibrating) {
                     mIsVibrating = true;
