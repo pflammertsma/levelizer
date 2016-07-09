@@ -22,14 +22,10 @@ import android.widget.TextView;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by FrankkieNL on 7/8/2016.
- */
 public class WhitelistActivity extends AppCompatActivity {
 
     ListView mListView;
@@ -44,7 +40,7 @@ public class WhitelistActivity extends AppCompatActivity {
         initUI();
     }
 
-    public void initUI() {
+    private void initUI() {
         setContentView(R.layout.activity_whitelist);
         mListView = (ListView) findViewById(android.R.id.list);
         mListEmpty = (TextView) findViewById(android.R.id.empty);
@@ -94,13 +90,13 @@ public class WhitelistActivity extends AppCompatActivity {
         }
     }
 
-    public class AppsListAdapter extends BaseAdapter {
+    private class AppsListAdapter extends BaseAdapter {
 
         List<String> mPackageNames = new ArrayList<String>();
 
         public AppsListAdapter() {
-            Set defaultPackageNames = new LinkedHashSet();
-            defaultPackageNames.addAll(Arrays.asList(CameraDetectionService.CAMERA_APPS_ARRAY));
+            Set<String> defaultPackageNames = new LinkedHashSet<>();
+            defaultPackageNames.addAll(CameraDetectionService.getCameraApps());
             mPackageNames.addAll(Prefs.getOrderedStringSet("whitelist", defaultPackageNames));
         }
 
