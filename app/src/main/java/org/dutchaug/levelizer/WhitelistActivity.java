@@ -75,11 +75,15 @@ public class WhitelistActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String packageName = adapterView.getAdapter().getItem(i).toString();
+                PackageInfo packageInfo = (PackageInfo) adapterView.getAdapter().getItem(i);
+                if (packageInfo == null) {
+                    return;
+                }
+                String packageName = packageInfo.packageName;
                 try {
-                    PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+                    PackageInfo internalPackageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
                     // App is installed; launch it
-                    Intent intent = mPackageManager.getLaunchIntentForPackage(packageInfo.packageName);
+                    Intent intent = mPackageManager.getLaunchIntentForPackage(internalPackageInfo.packageName);
                     startActivity(intent);
                 } catch (PackageManager.NameNotFoundException e) {
                     // App is not installed; open Google Play Store
