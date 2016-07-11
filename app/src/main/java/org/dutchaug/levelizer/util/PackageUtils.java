@@ -13,6 +13,8 @@ import java.util.Locale;
 
 public abstract class PackageUtils {
 
+    private static final String TAG = PackageUtils.class.getSimpleName();
+
     @NonNull
     public static List<PackageInfo> getPackagesHoldingPermissions(PackageManager packageManager, String[] permissions) {
         //Get a list of installed apps, that have camera permission
@@ -73,22 +75,31 @@ public abstract class PackageUtils {
                         ApplicationInfo rightApp = right.applicationInfo;
                         if (rightApp == null) {
                             try {
-                                rightApp = packageManager.getApplicationInfo(left.packageName, PackageManager.GET_META_DATA);
+                                rightApp = packageManager.getApplicationInfo(right.packageName, PackageManager.GET_META_DATA);
                             } catch (PackageManager.NameNotFoundException e) {
                             }
                         }
+                        int offsetter = 0;
                         String leftLabel, rightLabel;
                         if (leftApp == null) {
                             leftLabel = left.packageName;
                         } else {
                             leftLabel = leftApp.loadLabel(packageManager).toString().toLowerCase(Locale.getDefault());
                         }
+                        if (leftLabel.equals(left.packageName)) {
+                            // Move package names (apps without label) to bottom of list
+                            offsetter += 100;
+                        }
                         if (rightApp == null) {
                             rightLabel = right.packageName;
                         } else {
                             rightLabel = rightApp.loadLabel(packageManager).toString().toLowerCase(Locale.getDefault());
                         }
-                        return leftLabel.compareTo(rightLabel);
+                        if (rightLabel.equals(right.packageName)) {
+                            // Move package names (apps without label) to bottom of list
+                            offsetter -= 100;
+                        }
+                        return leftLabel.compareTo(rightLabel) + offsetter;
                     }
                 }
         );
