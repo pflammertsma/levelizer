@@ -25,7 +25,7 @@ public class CameraDetectionService extends AccessibilityService {
             "com.motorola.camera",
             "com.lge.camera",
             "com.sec.android.app.camera",
-    };
+            };
     private static final List<String> CAMERA_APPS_LIST = Arrays.asList(CAMERA_APPS_ARRAY);
 
     /**
@@ -64,16 +64,19 @@ public class CameraDetectionService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        Log.d(TAG, "onAccessibilityEvent: " + event);
+
         final int eventType = event.getEventType();
         String packageName = null;
         switch (eventType) {
             case AccessibilityEvent.TYPE_WINDOWS_CHANGED:
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                packageName = event.getPackageName().toString();
+                CharSequence pn = event.getPackageName();
+                if (pn != null) {
+                    packageName = pn.toString();
+                }
                 break;
         }
-
-        Log.d(TAG, "onAccessibilityEvent: " + event);
 
         if (packageName != null) {
             if (packageName.equals(PACKAGE_SYSTEMUI)) {
