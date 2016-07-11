@@ -47,14 +47,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_whitelist"/>
+                android:text="@string/onboarding_whitelist_placeholder"/>
 
             <Button
                 android:id="@+id/onboarding_whitelist_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/camera_whitelist"/>
+                android:text="@string/camera_whitelist_placeholder"/>
 
             <android.support.v4.widget.Space
                 android:layout_width="0dp"

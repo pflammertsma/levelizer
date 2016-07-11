@@ -46,7 +46,7 @@ public class WhitelistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_whitelist);
         ButterKnife.bind(this);
 
-        setTitle(R.string.camera_whitelist);
+        setTitle(R.string.camera_whitelist_placeholder);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -95,17 +95,6 @@ public class WhitelistActivity extends AppCompatActivity {
                 }
             }
         });
-
-        if (true) {
-            mFab.setVisibility(View.GONE);
-        } else {
-            mFab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showAddApp();
-                }
-            });
-        }
     }
 
     public void showAddApp() {
