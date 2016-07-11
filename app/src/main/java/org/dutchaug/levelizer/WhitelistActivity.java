@@ -1,5 +1,6 @@
 package org.dutchaug.levelizer;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -67,17 +68,21 @@ public class WhitelistActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String packageName = adapterView.getAdapter().getItem(i).toString();
                 try {
-                    //ApplicationInfo packageInfo = mPackageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA);
                     PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-                    //App is installed, launch it.
-                    Intent intent = mPackageManager.getLaunchIntentForPackage(packageName);
+                    // App is installed; launch it
+                    Intent intent = mPackageManager.getLaunchIntentForPackage(packageInfo.packageName);
                     startActivity(intent);
                 } catch (PackageManager.NameNotFoundException e) {
-                    //App is not installed, open Google Play Store
-                    String web = "http://play.google.com/store/apps/details?id=";
-                    String app = "market://details?id=";
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(web + packageName));
-                    startActivity(intent);
+                    // App is not installed; open Google Play Store
+                    try {
+                        String app = "market://details?id=";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(app + packageName));
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e2) {
+                        String web = "http://play.google.com/store/apps/details?id=";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(web + packageName));
+                        startActivity(intent);
+                    }
                 }
             }
         });
