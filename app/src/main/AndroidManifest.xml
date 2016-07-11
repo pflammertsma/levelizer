@@ -39,6 +39,10 @@
         </service>
         <service android:name=".LevelizerService"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="360de4072a81372f1ef315f1854dab7cb020678f" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

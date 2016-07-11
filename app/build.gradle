@@ -1,8 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'android-apt'
 
 repositories {
     maven { url "http://dl.bintray.com/pixplicity/maven" }
+    maven { url 'https://maven.fabric.io/public' }
 }
 
 android {
@@ -27,6 +38,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.0@aar') {
+        transitive = true;
+    }
 
     compile 'com.jakewharton:butterknife:8.2.0'
     apt 'com.jakewharton:butterknife-compiler:8.2.0'
