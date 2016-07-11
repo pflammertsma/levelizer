@@ -2,7 +2,6 @@ package org.dutchaug.levelizer;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,7 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import org.dutchaug.levelizer.util.PackageUtils;
+
 import java.util.List;
 
 public class AddAppDialogFragment extends DialogFragment {
@@ -28,19 +28,14 @@ public class AddAppDialogFragment extends DialogFragment {
         return makeDialog();
     }
 
-    public Dialog makeDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //Get a list of installed apps, that have camera permission
-        List<PackageInfo> packagesHoldingPermissions = mPackageManager.getPackagesHoldingPermissions(new String[]{Manifest.permission.CAMERA}, 0);
-        List<String> packageNames = new ArrayList<>();
-        for (PackageInfo pkg : packagesHoldingPermissions) {
-            packageNames.add(pkg.packageName);
-        }
+    public Dialog makeDialog() {
+        List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(mPackageManager, new String[]{Manifest.permission.CAMERA});
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         ListView listView = new ListView(getActivity());
         builder.setView(listView);
         mAdapter = new AppsListAdapter(getActivity());
-        mAdapter.setData(packageNames);
+        mAdapter.setData(apps);
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -51,4 +46,5 @@ public class AddAppDialogFragment extends DialogFragment {
 
         return builder.create();
     }
+
 }

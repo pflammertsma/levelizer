@@ -2,6 +2,7 @@ package org.dutchaug.levelizer;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import java.util.List;
 public class AppsListAdapter extends BaseAdapter {
 
     private final LayoutInflater mLayoutInflater;
-    private List<String> mPackageNames = new ArrayList<String>();
+    private List<PackageInfo> mPackages = new ArrayList<>();
     private PackageManager mPackageManager;
 
     public AppsListAdapter(Context context) {
@@ -26,18 +27,18 @@ public class AppsListAdapter extends BaseAdapter {
         mPackageManager = context.getPackageManager();
     }
 
-    public void setData(List<String> packageNames){
-        mPackageNames = packageNames;
+    public void setData(List<PackageInfo> packages) {
+        mPackages = packages;
     }
 
     @Override
     public int getCount() {
-        return mPackageNames.size();
+        return mPackages.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return mPackageNames.get(i);
+        return mPackages.get(i);
     }
 
     @Override
@@ -55,13 +56,19 @@ public class AppsListAdapter extends BaseAdapter {
             vh.secondLine = (TextView) view.findViewById(R.id.listitem_secondline);
             view.setTag(vh);
         }
+
         ListItemViewHolder viewHolder = (ListItemViewHolder) view.getTag();
-        String packageName = getItem(i).toString();
+
+        PackageInfo pkg = (PackageInfo) getItem(i);
+        String packageName = pkg.packageName;
         viewHolder.secondLine.setText(packageName);
 
         try {
-            ApplicationInfo packageInfo = mPackageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            String applicationLabel = mPackageManager.getApplicationLabel(packageInfo).toString();
+            ApplicationInfo appInfo = pkg.applicationInfo;
+            if (appInfo == null) {
+                mPackageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+            }
+            String applicationLabel = mPackageManager.getApplicationLabel(appInfo).toString();
             viewHolder.firstLine.setText(applicationLabel);
         } catch (PackageManager.NameNotFoundException e) {
             viewHolder.firstLine.setText(R.string.not_installed);
@@ -69,7 +76,11 @@ public class AppsListAdapter extends BaseAdapter {
         }
 
         try {
-            Drawable applicationIcon = mPackageManager.getApplicationIcon(packageName);
+            Drawable applicationIcon = pkg.applicationInfo == null
+                    ? null : pkg.applicationInfo.loadIcon(mPackageManager);
+            if (applicationIcon == null) {
+                mPackageManager.getApplicationIcon(packageName);
+            }
             viewHolder.imageView.setImageDrawable(applicationIcon);
         } catch (PackageManager.NameNotFoundException e) {
             //viewHolder.imageView.setImageDrawable(getDrawable(android.R.drawable.sym_def_app_icon));

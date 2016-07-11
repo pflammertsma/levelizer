@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.dutchaug.levelizer.util.PackageUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -47,7 +49,7 @@ public class WhitelistActivity extends AppCompatActivity {
         mListEmpty = (TextView) findViewById(android.R.id.empty);
         mAdapter = new AppsListAdapter(this);
 
-        List<String> whitelistPackageNames = new ArrayList<String>();
+        List<String> whitelistPackageNames = new ArrayList<>();
         // Fill the preset ones
         whitelistPackageNames.addAll(CameraDetectionService.getCameraApps());
         // Also add the user ones
@@ -55,7 +57,8 @@ public class WhitelistActivity extends AppCompatActivity {
         if (userPackageNames != null) {
             whitelistPackageNames.addAll(userPackageNames);
         }
-        mAdapter.setData(whitelistPackageNames);
+        List<PackageInfo> apps = PackageUtils.getPackageInfos(mPackageManager, whitelistPackageNames);
+        mAdapter.setData(apps);
 
         mListView.setAdapter(mAdapter);
 
