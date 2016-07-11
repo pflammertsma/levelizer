@@ -61,7 +61,7 @@ public abstract class PackageUtils {
         return apps;
     }
 
-    public static void sort(final PackageManager packageManager, List<PackageInfo> packages) {
+    private static void sort(final PackageManager packageManager, List<PackageInfo> packages) {
         Collections.sort(packages, new Comparator<PackageInfo>() {
                     @Override
                     public int compare(PackageInfo left, PackageInfo right) {
@@ -79,7 +79,7 @@ public abstract class PackageUtils {
                             } catch (PackageManager.NameNotFoundException e) {
                             }
                         }
-                        int offsetter = 0;
+                        int comparisonOffset = 0;
                         String leftLabel, rightLabel;
                         if (leftApp == null) {
                             leftLabel = left.packageName;
@@ -88,7 +88,7 @@ public abstract class PackageUtils {
                         }
                         if (leftLabel.equals(left.packageName)) {
                             // Move package names (apps without label) to bottom of list
-                            offsetter += 100;
+                            comparisonOffset += 100;
                         }
                         if (rightApp == null) {
                             rightLabel = right.packageName;
@@ -97,9 +97,9 @@ public abstract class PackageUtils {
                         }
                         if (rightLabel.equals(right.packageName)) {
                             // Move package names (apps without label) to bottom of list
-                            offsetter -= 100;
+                            comparisonOffset -= 100;
                         }
-                        return leftLabel.compareTo(rightLabel) + offsetter;
+                        return leftLabel.compareTo(rightLabel) + comparisonOffset;
                     }
                 }
         );
