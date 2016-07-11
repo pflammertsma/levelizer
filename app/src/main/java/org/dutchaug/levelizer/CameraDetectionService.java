@@ -25,6 +25,7 @@ public class CameraDetectionService extends AccessibilityService {
             "com.motorola.camera",
             "com.lge.camera",
             "com.sec.android.app.camera",
+            "com.htc.camera",
             };
     private static final List<String> CAMERA_APPS_LIST = Arrays.asList(CAMERA_APPS_ARRAY);
 
