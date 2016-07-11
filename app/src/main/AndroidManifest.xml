@@ -3,6 +3,7 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".LevelizerApp"
@@ -11,9 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity
-            android:name=".OnboardingActivity">
+        <activity android:name=".OnboardingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -26,6 +25,9 @@
         <activity
             android:name=".AppListActivity"
             android:label="@string/app_list"/>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/about_title"/>
 
         <service
             android:name=".CameraDetectionService"
@@ -33,16 +35,17 @@
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_service_config" />
+                android:resource="@xml/accessibility_service_config"/>
         </service>
         <service android:name=".LevelizerService"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="360de4072a81372f1ef315f1854dab7cb020678f" />
+            android:value="360de4072a81372f1ef315f1854dab7cb020678f"/>
+
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

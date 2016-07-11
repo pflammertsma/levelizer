@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -17,21 +18,54 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="192dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_launcher_large"/>
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="64dp"
+                    android:layout_marginRight="16dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_launcher_large"
+                    tools:ignore="ContentDescription,RtlHardcoded"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_description"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"/>
+
+            </LinearLayout>
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:minHeight="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:minHeight="8dp"/>
 
             <TextView
                 android:id="@+id/onboarding_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/onboarding_accessibility"/>
+                android:text="@string/onboarding_accessibility"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/onboarding_enable_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,24 +76,31 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:minHeight="16dp"/>
+                android:minHeight="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:minHeight="8dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_whitelist_placeholder"/>
+                android:text="@string/onboarding_whitelist_placeholder"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/onboarding_whitelist_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/camera_whitelist_placeholder"/>
-
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
 
         </LinearLayout>
 

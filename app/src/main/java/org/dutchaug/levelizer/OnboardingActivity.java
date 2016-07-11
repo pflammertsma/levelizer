@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 
@@ -17,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class OnboardingActivity extends FragmentActivity {
+public class OnboardingActivity extends AppCompatActivity {
 
     private static final String TAG = OnboardingActivity.class.getSimpleName();
 
@@ -51,6 +53,22 @@ public class OnboardingActivity extends FragmentActivity {
     protected void onStop() {
         mHandler.removeCallbacks(mRunnable);
         super.onStop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.onboarding, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkAccessibilityStatus() {

@@ -17,6 +17,32 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        debug {
+            Properties props = new Properties()
+            try {
+                props.load(new FileInputStream(".signing/debug.properties"))
+                storeFile file('../.signing/debug.jks')
+                storePassword(props['DEBUG_STORE_PASSWORD'])
+                keyAlias(props['DEBUG_KEY_ALIAS'])
+                keyPassword(props['DEBUG_KEY_PASSWORD'])
+            } catch (IOException e) {
+                // Ignore
+            }
+        }
+        release {
+            Properties props = new Properties()
+            try {
+                props.load(new FileInputStream(".signing/release.properties"))
+                storeFile file('../.signing/release.jks')
+                storePassword(props['RELEASE_STORE_PASSWORD'])
+                keyAlias(props['RELEASE_KEY_ALIAS'])
+                keyPassword(props['RELEASE_KEY_PASSWORD'])
+            } catch (IOException e) {
+                // Ignore
+            }
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
     defaultConfig {
@@ -29,9 +55,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -50,4 +81,5 @@ dependencies {
 
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
 }
