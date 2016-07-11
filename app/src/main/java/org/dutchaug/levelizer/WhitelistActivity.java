@@ -1,5 +1,6 @@
 package org.dutchaug.levelizer;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -16,23 +17,36 @@ import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.dutchaug.levelizer.util.PackageUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class WhitelistActivity extends AppCompatActivity {
 
-    ListView mListView;
-    TextView mListEmpty;
-    AppsListAdapter mAdapter;
+    @BindView(android.R.id.list)
+    protected ListView mListView;
 
+    @BindView(android.R.id.empty)
+    protected TextView mListEmpty;
+
+    @BindView(R.id.whitelist_add_btn)
+    protected FloatingActionButton mFab;
+
+    private AppsListAdapter mAdapter;
     private PackageManager mPackageManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_whitelist);
-        setTitle(R.string.camera_whitelist);
+        ButterKnife.bind(this);
+
+        setTitle(R.string.camera_whitelist_placeholder);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -43,11 +57,9 @@ public class WhitelistActivity extends AppCompatActivity {
 
         mPackageManager = getPackageManager();
 
-        mListView = (ListView) findViewById(android.R.id.list);
-        mListEmpty = (TextView) findViewById(android.R.id.empty);
         mAdapter = new AppsListAdapter(this);
 
-        List<String> whitelistPackageNames = new ArrayList<String>();
+        List<String> whitelistPackageNames = new ArrayList<>();
         // Fill the preset ones
         whitelistPackageNames.addAll(CameraDetectionService.getCameraApps());
         // Also add the user ones
@@ -55,7 +67,8 @@ public class WhitelistActivity extends AppCompatActivity {
         if (userPackageNames != null) {
             whitelistPackageNames.addAll(userPackageNames);
         }
-        mAdapter.setData(whitelistPackageNames);
+        List<PackageInfo> apps = PackageUtils.getPackageInfos(mPackageManager, whitelistPackageNames);
+        mAdapter.setData(apps);
 
         mListView.setAdapter(mAdapter);
 
@@ -64,26 +77,22 @@ public class WhitelistActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String packageName = adapterView.getAdapter().getItem(i).toString();
                 try {
-                    //ApplicationInfo packageInfo = mPackageManager.getApplicationInfo(packageName,PackageManager.GET_META_DATA);
                     PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-                    //App is installed, launch it.
-                    Intent intent = mPackageManager.getLaunchIntentForPackage(packageName);
+                    // App is installed; launch it
+                    Intent intent = mPackageManager.getLaunchIntentForPackage(packageInfo.packageName);
                     startActivity(intent);
                 } catch (PackageManager.NameNotFoundException e) {
-                    //App is not installed, open Google Play Store
-                    String web = "http://play.google.com/store/apps/details?id=";
-                    String app = "market://details?id=";
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(web + packageName));
-                    startActivity(intent);
+                    // App is not installed; open Google Play Store
+                    try {
+                        String app = "market://details?id=";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(app + packageName));
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e2) {
+                        String web = "http://play.google.com/store/apps/details?id=";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(web + packageName));
+                        startActivity(intent);
+                    }
                 }
-            }
-        });
-
-        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.whitelist_add_btn);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddApp();
             }
         });
     }

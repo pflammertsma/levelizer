@@ -7,23 +7,44 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import org.dutchaug.levelizer.util.PackageUtils;
 
 import java.util.List;
 
 public class AddAppDialogFragment extends DialogFragment {
 
     PackageManager mPackageManager;
+    AppsListAdapter mAdapter;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mPackageManager = getActivity().getPackageManager();
-        return super.onCreateDialog(savedInstanceState);
+        return makeDialog();
     }
 
-    public void init(){
-        //Get a list of installed apps, that have camera permission
-        List<PackageInfo> packagesHoldingPermissions = mPackageManager.getPackagesHoldingPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+    public Dialog makeDialog() {
+        List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(mPackageManager, new String[]{Manifest.permission.CAMERA});
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        ListView listView = new ListView(getActivity());
+        builder.setView(listView);
+        mAdapter = new AppsListAdapter(getActivity());
+        mAdapter.setData(apps);
+        listView.setAdapter(mAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });
+
+        return builder.create();
     }
+
 }

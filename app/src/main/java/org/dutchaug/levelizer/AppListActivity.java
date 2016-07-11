@@ -1,6 +1,7 @@
 package org.dutchaug.levelizer;
 
-import android.content.pm.ApplicationInfo;
+import android.Manifest;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -12,14 +13,21 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import org.dutchaug.levelizer.util.PackageUtils;
+
 import java.util.List;
+
+import butterknife.BindView;
 
 public class AppListActivity extends AppCompatActivity {
 
-    ListView mListView;
-    TextView mListEmpty;
-    AppsListAdapter mAdapter;
+    @BindView(android.R.id.list)
+    protected ListView mListView;
+
+    @BindView(android.R.id.empty)
+    protected TextView mListEmpty;
+
+    private AppsListAdapter mAdapter;
 
     private PackageManager mPackageManager;
     private LayoutInflater mLayoutInflater;
@@ -40,16 +48,10 @@ public class AppListActivity extends AppCompatActivity {
         mLayoutInflater = LayoutInflater.from(this);
         mPackageManager = getPackageManager();
 
-        mListView = (ListView) findViewById(android.R.id.list);
-        mListEmpty = (TextView) findViewById(android.R.id.empty);
         mAdapter = new AppsListAdapter(this);
 
-        List<String> packageNames = new ArrayList<>();
-        List<ApplicationInfo> packages = mPackageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        for (ApplicationInfo pkg : packages) {
-            packageNames.add(pkg.packageName);
-        }
-        mAdapter.setData(packageNames);
+        List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(mPackageManager, new String[]{Manifest.permission.CAMERA});
+        mAdapter.setData(apps);
 
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

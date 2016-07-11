@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.ContextWrapper;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 
 public class LevelizerApp extends Application {
@@ -12,8 +14,10 @@ public class LevelizerApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //https://github.com/Pixplicity/EasyPreferences
-        // Initialize the Prefs class
+        // Initialize Fabric
+        Fabric.with(this, new Crashlytics());
+
+        // Initialize EasyPreferences
         new Prefs.Builder()
                 .setContext(this)
                 .setMode(ContextWrapper.MODE_PRIVATE)

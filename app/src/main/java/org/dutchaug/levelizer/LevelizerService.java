@@ -14,7 +14,6 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 public class LevelizerService extends Service {
@@ -51,7 +50,6 @@ public class LevelizerService extends Service {
                 amountOffLevel = Math.abs(sensorEvent.values[1]);
             }
             boolean leveled = amountOffLevel < LEVEL_THRESHOLD;
-            Log.d(TAG, String.format("Leveled: %b", leveled));
             if (!leveled) {
                 /* TODO we need to change the vibration frequency dynamically, but this isn't so easy :)
                 if (mIsVibrating) {
@@ -89,7 +87,7 @@ public class LevelizerService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && BuildConfig.DEBUG_SHOW_TOASTS) {
             Toast.makeText(this, "Levelizer started", Toast.LENGTH_SHORT).show();
         }
 
@@ -127,7 +125,7 @@ public class LevelizerService extends Service {
 
     @Override
     public void onDestroy() {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && BuildConfig.DEBUG_SHOW_TOASTS) {
             Toast.makeText(this, "Levelizer stopped", Toast.LENGTH_SHORT).show();
         }
 

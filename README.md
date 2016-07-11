@@ -12,8 +12,17 @@ The app is designed with battery life in mind.
 ## Todo
 
 - Allow user to whitelist camera apps from a list of all apps installed
-- Configuration options
+- Configuration options:
+  - Vibration strength
+  - Toggle notification
 - Window overlay to also give a visual cue when device is level
+- Audio cue when device is level
+
+## Contributors
+
+* [Paul Lammertsma](https://github.com/pflammertsma)
+* [Martin Liersch](https://github.com/Goddchen)
+* [Frank Bouwens](https://github.com/frankkienl)
 
 ## License
 
