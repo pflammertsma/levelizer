@@ -15,6 +15,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class AppsListAdapter extends BaseAdapter {
 
@@ -50,10 +53,7 @@ public class AppsListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
             view = mLayoutInflater.inflate(R.layout.listitem, viewGroup, false);
-            ListItemViewHolder vh = new ListItemViewHolder();
-            vh.imageView = (ImageView) view.findViewById(R.id.listiem_icon);
-            vh.firstLine = (TextView) view.findViewById(R.id.listitem_firstline);
-            vh.secondLine = (TextView) view.findViewById(R.id.listitem_secondline);
+            ListItemViewHolder vh = new ListItemViewHolder(view);
             view.setTag(vh);
         }
 
@@ -90,10 +90,21 @@ public class AppsListAdapter extends BaseAdapter {
         return view;
     }
 
-    public class ListItemViewHolder {
+    class ListItemViewHolder {
+
+        @BindView(R.id.listiem_icon)
         ImageView imageView;
+
+        @BindView(R.id.listitem_firstline)
         TextView firstLine;
+
+        @BindView(R.id.listitem_secondline)
         TextView secondLine;
+
+        ListItemViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

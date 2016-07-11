@@ -8,17 +8,21 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class OnboardingActivity extends FragmentActivity {
 
     private static final String TAG = OnboardingActivity.class.getSimpleName();
 
-    private Button mEnableButton;
+    @BindView(R.id.onboarding_enable_btn)
+    Button mEnableButton;
 
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
@@ -33,24 +37,7 @@ public class OnboardingActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
-
-        mEnableButton = (Button) findViewById(R.id.onboarding_enable_btn);
-        mEnableButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-                startActivity(i);
-            }
-        });
-
-        findViewById(R.id.onboarding_whitelist_btn)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent i = new Intent(getApplicationContext(), WhitelistActivity.class);
-                        startActivity(i);
-                    }
-                });
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -94,6 +81,18 @@ public class OnboardingActivity extends FragmentActivity {
         Log.d(TAG, "accessibility service " + (enabled ? "enabled" : "disabled"));
         mEnableButton.setText(enabled ? R.string.onboarding_all_done : R.string.enable);
         mEnableButton.setEnabled(!enabled);
+    }
+
+    @OnClick(R.id.onboarding_enable_btn)
+    protected void onClickEnable() {
+        Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
+
+    @OnClick(R.id.onboarding_whitelist_btn)
+    protected void onClickWhitelist() {
+        startActivity(new Intent(getApplicationContext(), WhitelistActivity.class));
     }
 
 }

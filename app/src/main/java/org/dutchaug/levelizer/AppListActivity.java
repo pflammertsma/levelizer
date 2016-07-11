@@ -17,11 +17,17 @@ import org.dutchaug.levelizer.util.PackageUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
+
 public class AppListActivity extends AppCompatActivity {
 
-    ListView mListView;
-    TextView mListEmpty;
-    AppsListAdapter mAdapter;
+    @BindView(android.R.id.list)
+    protected ListView mListView;
+
+    @BindView(android.R.id.empty)
+    protected TextView mListEmpty;
+
+    private AppsListAdapter mAdapter;
 
     private PackageManager mPackageManager;
     private LayoutInflater mLayoutInflater;
@@ -42,8 +48,6 @@ public class AppListActivity extends AppCompatActivity {
         mLayoutInflater = LayoutInflater.from(this);
         mPackageManager = getPackageManager();
 
-        mListView = (ListView) findViewById(android.R.id.list);
-        mListEmpty = (TextView) findViewById(android.R.id.empty);
         mAdapter = new AppsListAdapter(this);
 
         List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(mPackageManager, new String[]{Manifest.permission.CAMERA});

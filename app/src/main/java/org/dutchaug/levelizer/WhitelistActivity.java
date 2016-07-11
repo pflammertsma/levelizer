@@ -23,18 +23,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class WhitelistActivity extends AppCompatActivity {
 
-    ListView mListView;
-    TextView mListEmpty;
-    AppsListAdapter mAdapter;
+    @BindView(android.R.id.list)
+    protected ListView mListView;
 
+    @BindView(android.R.id.empty)
+    protected TextView mListEmpty;
+
+    @BindView(R.id.whitelist_add_btn)
+    protected FloatingActionButton mFab;
+
+    private AppsListAdapter mAdapter;
     private PackageManager mPackageManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_whitelist);
+        ButterKnife.bind(this);
+
         setTitle(R.string.camera_whitelist);
 
         ActionBar actionBar = getSupportActionBar();
@@ -46,8 +57,6 @@ public class WhitelistActivity extends AppCompatActivity {
 
         mPackageManager = getPackageManager();
 
-        mListView = (ListView) findViewById(android.R.id.list);
-        mListEmpty = (TextView) findViewById(android.R.id.empty);
         mAdapter = new AppsListAdapter(this);
 
         List<String> whitelistPackageNames = new ArrayList<>();
@@ -87,13 +96,16 @@ public class WhitelistActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton addButton = (FloatingActionButton) findViewById(R.id.whitelist_add_btn);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAddApp();
-            }
-        });
+        if (true) {
+            mFab.setVisibility(View.GONE);
+        } else {
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showAddApp();
+                }
+            });
+        }
     }
 
     public void showAddApp() {
