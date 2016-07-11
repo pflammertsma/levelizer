@@ -70,9 +70,12 @@ public class AppsListAdapter extends BaseAdapter {
             }
             String applicationLabel = mPackageManager.getApplicationLabel(appInfo).toString();
             viewHolder.firstLine.setText(applicationLabel);
+            viewHolder.firstLine.setAlpha(1f);
+            viewHolder.imageView.setAlpha(1f);
         } catch (PackageManager.NameNotFoundException e) {
             viewHolder.firstLine.setText(R.string.not_installed);
-            //e.printStackTrace();
+            viewHolder.firstLine.setAlpha(0.5f);
+            viewHolder.imageView.setAlpha(0.5f);
         }
 
         try {
