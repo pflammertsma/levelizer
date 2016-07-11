@@ -11,6 +11,7 @@ android {
         applicationId "org.dutchaug.levelizer"
         minSdkVersion 15
         targetSdkVersion 24
+        buildConfigField("boolean", "DEBUG_SHOW_TOASTS", "false")
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
