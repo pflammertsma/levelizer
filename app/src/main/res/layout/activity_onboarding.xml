@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -35,7 +36,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/about_description"/>
+                    android:text="@string/about_description"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"/>
 
             </LinearLayout>
 
@@ -60,9 +62,10 @@
                 android:id="@+id/onboarding_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_accessibility"/>
+                android:text="@string/onboarding_accessibility"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/onboarding_enable_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,9 +92,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_whitelist"/>
+                android:text="@string/onboarding_whitelist"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
-            <Button
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/onboarding_whitelist_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
