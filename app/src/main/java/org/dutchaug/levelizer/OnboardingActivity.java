@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class OnboardingActivity extends FragmentActivity {
+public class OnboardingActivity extends AppCompatActivity {
 
     private static final String TAG = OnboardingActivity.class.getSimpleName();
 
