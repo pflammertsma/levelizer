@@ -19,4 +19,5 @@
     <string name="not_installed">This app is not installed</string>
     <string name="no_apps_found">No apps found.</string>
     <string name="app_list">App list</string>
+    <string name="accessibility_service_description">Levelizer gives you haptic feedback when you\'re attempting to take an unlevel photo.\n\nThis accessibility service is used to react when a whitelisted camera app is opened.</string>
 </resources>
