@@ -38,6 +38,7 @@ public class LevelizerService extends Service {
     private Vibrator mVibrator;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
+
         @SuppressWarnings("SimplifiableIfStatement")
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
@@ -75,8 +76,8 @@ public class LevelizerService extends Service {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int i) {
-
         }
+
     };
 
     @Override
