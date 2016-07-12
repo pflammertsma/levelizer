@@ -25,6 +25,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class WhitelistActivity extends AppCompatActivity {
 
@@ -34,7 +35,7 @@ public class WhitelistActivity extends AppCompatActivity {
     @BindView(android.R.id.empty)
     protected TextView mListEmpty;
 
-    @BindView(R.id.whitelist_add_btn)
+    @BindView(R.id.bt_fab)
     protected FloatingActionButton mFab;
 
     private AppsListAdapter mAdapter;
@@ -46,7 +47,7 @@ public class WhitelistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_whitelist);
         ButterKnife.bind(this);
 
-        setTitle(R.string.camera_whitelist_placeholder);
+        setTitle(R.string.camera_whitelist);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -101,7 +102,8 @@ public class WhitelistActivity extends AppCompatActivity {
         });
     }
 
-    public void showAddApp() {
+    @OnClick(R.id.bt_fab)
+    public void onClickFab() {
         startActivity(new Intent(this, AppListActivity.class));
     }
 

@@ -108,7 +108,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_whitelist_placeholder"
+                android:text="@string/onboarding_whitelist"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
             <android.support.v7.widget.AppCompatButton
@@ -116,7 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/camera_whitelist_placeholder"/>
+                android:text="@string/camera_whitelist"/>
 
         </LinearLayout>
 
