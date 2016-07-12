@@ -10,8 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.pixplicity.easyprefs.library.Prefs;
 
 import java.util.List;
 
@@ -23,8 +27,17 @@ public class OnboardingActivity extends AppCompatActivity {
 
     private static final String TAG = OnboardingActivity.class.getSimpleName();
 
-    @BindView(R.id.onboarding_enable_btn)
-    Button mEnableButton;
+    @BindView(R.id.tv_service)
+    TextView mTvService;
+
+    @BindView(R.id.bt_service)
+    Button mBtService;
+
+    @BindView(R.id.tv_toggle)
+    TextView mTvToggle;
+
+    @BindView(R.id.bt_toggle)
+    Button mBtToggle;
 
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
@@ -77,7 +90,7 @@ public class OnboardingActivity extends AppCompatActivity {
         if (accessibilityService != null) {
             List<AccessibilityServiceInfo> infos =
                     accessibilityService.getEnabledAccessibilityServiceList(
-                            AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+                            AccessibilityServiceInfo.FEEDBACK_HAPTIC);
 
             boolean enabled = false;
             if (infos != null) {
@@ -95,20 +108,48 @@ public class OnboardingActivity extends AppCompatActivity {
         }
     }
 
-    private void onAccessibilityStatus(boolean enabled) {
-        Log.d(TAG, "accessibility service " + (enabled ? "enabled" : "disabled"));
-        mEnableButton.setText(enabled ? R.string.onboarding_all_done : R.string.enable);
-        mEnableButton.setEnabled(!enabled);
+    private void onAccessibilityStatus(boolean serviceEnabled) {
+        Log.d(TAG, "accessibility service " + (serviceEnabled ? "enabled" : "disabled"));
+        mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable);
+        mBtService.setEnabled(!serviceEnabled);
+        if (serviceEnabled) {
+            mTvService.setVisibility(View.GONE);
+            mBtService.setVisibility(View.GONE);
+            if (Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true)) {
+                mTvToggle.setText("Levelizer is currently enabled.");
+                mBtToggle.setText("Disable");
+            } else {
+                mTvToggle.setText("Levelizer is currently disabled.");
+                mBtToggle.setText("Enable");
+            }
+            mTvToggle.setVisibility(View.VISIBLE);
+            mBtToggle.setVisibility(View.VISIBLE);
+        } else {
+            mTvService.setVisibility(View.VISIBLE);
+            mBtService.setVisibility(View.VISIBLE);
+            mTvToggle.setVisibility(View.GONE);
+            mBtToggle.setVisibility(View.GONE);
+        }
     }
 
-    @OnClick(R.id.onboarding_enable_btn)
-    protected void onClickEnable() {
+    @OnClick(R.id.bt_service)
+    protected void onClickService() {
         Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
     }
 
-    @OnClick(R.id.onboarding_whitelist_btn)
+    @OnClick(R.id.bt_toggle)
+    protected void onClickToggle() {
+        boolean enabled = !Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
+        Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, enabled);
+        Intent i = new Intent(CameraDetectionService.ACTION_STATE_CHANGE);
+        i.putExtra(CameraDetectionService.EXTRA_ENABLED, enabled);
+        sendBroadcast(i);
+        checkAccessibilityStatus();
+    }
+
+    @OnClick(R.id.bt_whitelist)
     protected void onClickWhitelist() {
         startActivity(new Intent(getApplicationContext(), WhitelistActivity.class));
     }

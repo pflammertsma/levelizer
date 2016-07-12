@@ -59,18 +59,34 @@
                 android:minHeight="8dp"/>
 
             <TextView
-                android:id="@+id/onboarding_description"
+                android:id="@+id/tv_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/onboarding_accessibility"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/onboarding_enable_btn"
+                android:id="@+id/bt_service"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/enable"/>
+
+            <TextView
+                android:id="@+id/tv_toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Levelizer is currently enabled."
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="gone"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/bt_toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Disable"
+                android:visibility="gone"/>
 
             <android.support.v4.widget.Space
                 android:layout_width="0dp"
@@ -92,15 +108,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/onboarding_whitelist"
+                android:text="@string/onboarding_whitelist_placeholder"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/onboarding_whitelist_btn"
+                android:id="@+id/bt_whitelist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/camera_whitelist"/>
+                android:text="@string/camera_whitelist_placeholder"/>
 
         </LinearLayout>
 

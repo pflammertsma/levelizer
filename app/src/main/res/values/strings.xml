@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Levelizer</string>
 
@@ -26,4 +27,9 @@
     <string name="no_apps_found">No apps found.</string>
     <string name="app_list">App list</string>
     <string name="contributors">Contributors</string>
+
+    <!-- FIXME temporary, until whitelisting is supported -->
+    <string name="onboarding_whitelist_placeholder">Curious which camera apps are supported by Levelizer?</string>
+    <string name="whitelist_explanation_placeholder">The following camera apps are supported by Levelizer:</string>
+    <string name="camera_whitelist_placeholder">Supported cameras</string>
 </resources>

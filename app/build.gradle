@@ -54,6 +54,7 @@ android {
         versionName "1.0.1"
 
         buildConfigField("boolean", "DEBUG_SHOW_TOASTS", "false")
+        buildConfigField("boolean", "DEBUG_LOG", "false")
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
