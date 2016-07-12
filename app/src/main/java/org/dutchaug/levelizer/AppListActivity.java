@@ -18,6 +18,7 @@ import org.dutchaug.levelizer.util.PackageUtils;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AppListActivity extends AppCompatActivity {
 
@@ -36,6 +37,8 @@ public class AppListActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_list);
+        ButterKnife.bind(this);
+
         setTitle(R.string.app_list);
 
         ActionBar actionBar = getSupportActionBar();
