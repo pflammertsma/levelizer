@@ -1,32 +1,36 @@
 package org.dutchaug.levelizer.fragments;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.adapters.AppsListAdapter;
 import org.dutchaug.levelizer.util.PackageUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AddAppDialogFragment extends DialogFragment {
 
     public static final String TAG = AddAppDialogFragment.class.getSimpleName();
 
-    private PackageManager mPackageManager;
-    private AppsListAdapter mAdapter;
+    @BindView(android.R.id.list)
+    protected ListView mListView;
+
+    @BindView(android.R.id.empty)
+    protected TextView mListEmpty;
 
     public AddAppDialogFragment(){
         //no argument constructor
@@ -35,26 +39,16 @@ public class AddAppDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return createView();
-    }
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_app_list, null, false);
+        ButterKnife.bind(this, view);
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mPackageManager =  getActivity().getPackageManager();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(createView());
-        return builder.create();
-    }
+        List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(
+                getActivity().getPackageManager(), new String[]{Manifest.permission.CAMERA});
 
-    public View createView(){
-        List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(mPackageManager, new String[]{Manifest.permission.CAMERA});
-
-        ListView listView = new ListView(getActivity());
-        mAdapter = new AppsListAdapter(getActivity());
-        mAdapter.setData(apps);
-        listView.setAdapter(mAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        AppsListAdapter adapter = new AppsListAdapter(getActivity());
+        adapter.setData(apps);
+        mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String packageName = adapterView.getAdapter().getItem(i).toString();
@@ -64,7 +58,7 @@ public class AddAppDialogFragment extends DialogFragment {
             }
         });
 
-        return listView;
+        return view;
     }
 
 }
