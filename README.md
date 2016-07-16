@@ -9,6 +9,8 @@ You can use your favorite camera app; Levelizer runs in the background!
 
 The app is designed with battery life in mind.
 
+<img src="play-assets/device-2016-07-12-011059.png" width="200"> <img src="play-assets/device-accessibility-service.png" width="200">
+
 ## Todo
 
 - Allow user to whitelist camera apps from a list of all apps installed

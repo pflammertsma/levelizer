@@ -46,12 +46,16 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
     defaultConfig {
-        applicationId "org.dutchaug.levelizer"
         minSdkVersion 15
         targetSdkVersion 24
+
+        applicationId "org.dutchaug.levelizer"
+        versionCode 3
+        versionName "1.0.1"
+
         buildConfigField("boolean", "DEBUG_SHOW_TOASTS", "false")
-        versionCode 1
-        versionName "1.0"
+        buildConfigField("boolean", "DEBUG_LOG", "false")
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

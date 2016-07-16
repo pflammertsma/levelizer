@@ -14,6 +14,7 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 public class LevelizerService extends Service {
@@ -41,11 +42,15 @@ public class LevelizerService extends Service {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             float amountOffLevel = 0f;
+            if (BuildConfig.DEBUG_LOG) {
+                // FIXME display less frequently, say once a second
+                Log.d(TAG, String.format("%.4f, %.4f, %.4f", sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2]));
+            }
             // check which axis we need to investigate (one has ~9.81 and has ~0)
-            if (sensorEvent.values[1] > GRAVITY_THRESHOLD) {
+            if (Math.abs(sensorEvent.values[1]) > GRAVITY_THRESHOLD) {
                 // This suggests axis with index 1 is pointing down
                 amountOffLevel = Math.abs(sensorEvent.values[0]);
-            } else if (sensorEvent.values[0] > GRAVITY_THRESHOLD) {
+            } else if (Math.abs(sensorEvent.values[0]) > GRAVITY_THRESHOLD) {
                 // This suggests axis with index 0 is pointing down
                 amountOffLevel = Math.abs(sensorEvent.values[1]);
             }
