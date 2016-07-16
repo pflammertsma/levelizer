@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -105,7 +106,13 @@ public class WhitelistActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onClickFab() {
-        startActivity(new Intent(this, AppListActivity.class));
+        if (true) {
+            FragmentManager fm = getSupportFragmentManager();
+            AddAppDialogFragment dialog = new AddAppDialogFragment();
+            dialog.show(fm, AddAppDialogFragment.TAG);
+        } else {
+            startActivity(new Intent(this, AppListActivity.class));
+        }
     }
 
     @Override

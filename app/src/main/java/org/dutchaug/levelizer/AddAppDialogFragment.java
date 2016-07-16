@@ -21,8 +21,10 @@ import java.util.List;
 
 public class AddAppDialogFragment extends DialogFragment {
 
-    PackageManager mPackageManager;
-    AppsListAdapter mAdapter;
+    public static final String TAG = AddAppDialogFragment.class.getSimpleName();
+
+    private PackageManager mPackageManager;
+    private AppsListAdapter mAdapter;
 
     public AddAppDialogFragment(){
         //no argument constructor
@@ -31,17 +33,19 @@ public class AddAppDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return initUI();
+        return createView();
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mPackageManager =  getActivity().getPackageManager();
-        return makeDialog();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(createView());
+        return builder.create();
     }
 
-    public View initUI(){
+    public View createView(){
         List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(mPackageManager, new String[]{Manifest.permission.CAMERA});
 
         ListView listView = new ListView(getActivity());
@@ -51,17 +55,11 @@ public class AddAppDialogFragment extends DialogFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                getDialog().dismiss();
             }
         });
 
         return listView;
-    }
-
-    public Dialog makeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(initUI());
-        return builder.create();
     }
 
 }
