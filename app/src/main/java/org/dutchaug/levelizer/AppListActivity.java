@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -26,6 +27,9 @@ public class AppListActivity extends AppCompatActivity {
 
     @BindView(android.R.id.empty)
     protected TextView mListEmpty;
+
+    @BindView(R.id.whitelist_add_btn)
+    protected FloatingActionButton mAddApp;
 
     private AppsListAdapter mAdapter;
 
@@ -62,6 +66,12 @@ public class AppListActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+    }
+
+    public void showAddAppDialogFragment(){
+
     }
 
     @Override
