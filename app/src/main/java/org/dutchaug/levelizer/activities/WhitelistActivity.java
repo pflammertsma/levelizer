@@ -1,12 +1,14 @@
 package org.dutchaug.levelizer.activities;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import org.dutchaug.levelizer.adapters.AppsListAdapter;
 import org.dutchaug.levelizer.services.CameraDetectionService;
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.util.PackageUtils;
+import org.dutchaug.levelizer.util.WhitelistManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WhitelistActivity extends AppCompatActivity {
+public class WhitelistActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
     @BindView(android.R.id.list)
     protected ListView mListView;
@@ -69,7 +72,7 @@ public class WhitelistActivity extends AppCompatActivity {
         // Fill the preset ones
         whitelistPackageNames.addAll(CameraDetectionService.getCameraApps());
         // Also add the user ones
-        Set<String> userPackageNames = Prefs.getOrderedStringSet("whitelist", null);
+        Set<String> userPackageNames = WhitelistManager.get();
         if (userPackageNames != null) {
             whitelistPackageNames.addAll(userPackageNames);
         }
@@ -110,13 +113,9 @@ public class WhitelistActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onClickFab() {
-        if (true) {
-            FragmentManager fm = getSupportFragmentManager();
-            AddAppDialogFragment dialog = new AddAppDialogFragment();
-            dialog.show(fm, AddAppDialogFragment.TAG);
-        } else {
-            startActivity(new Intent(this, AppListActivity.class));
-        }
+        FragmentManager fm = getSupportFragmentManager();
+        AddAppDialogFragment dialog = new AddAppDialogFragment();
+        dialog.show(fm, AddAppDialogFragment.TAG);
     }
 
     @Override
@@ -137,6 +136,11 @@ public class WhitelistActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+
     }
 
 }

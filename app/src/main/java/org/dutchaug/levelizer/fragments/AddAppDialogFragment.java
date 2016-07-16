@@ -1,6 +1,8 @@
 package org.dutchaug.levelizer.fragments;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.adapters.AppsListAdapter;
 import org.dutchaug.levelizer.util.PackageUtils;
+import org.dutchaug.levelizer.util.WhitelistManager;
 
 import java.util.List;
 
@@ -51,14 +54,23 @@ public class AddAppDialogFragment extends DialogFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String packageName = adapterView.getAdapter().getItem(i).toString();
-                // TODO add package name to prefs
-                Toast.makeText(getContext(), "TODO: add " + packageName, Toast.LENGTH_SHORT).show();
+                PackageInfo packageInfo = (PackageInfo) adapterView.getAdapter().getItem(i);
+                WhitelistManager.add(packageInfo);
+                Toast.makeText(getContext(), "TODO: add " + packageInfo, Toast.LENGTH_SHORT).show();
                 getDialog().dismiss();
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        final Activity activity = getActivity();
+        if (activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
+        }
     }
 
 }
