@@ -1,4 +1,4 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.fragments;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import org.dutchaug.levelizer.adapters.AppsListAdapter;
 import org.dutchaug.levelizer.util.PackageUtils;
 
 import java.util.List;
@@ -55,6 +57,9 @@ public class AddAppDialogFragment extends DialogFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String packageName = adapterView.getAdapter().getItem(i).toString();
+                // TODO add package name to prefs
+                Toast.makeText(getContext(), "TODO: add " + packageName, Toast.LENGTH_SHORT).show();
                 getDialog().dismiss();
             }
         });

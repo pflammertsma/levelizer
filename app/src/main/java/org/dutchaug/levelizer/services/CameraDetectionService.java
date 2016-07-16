@@ -1,4 +1,4 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.services;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;

@@ -1,4 +1,4 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.adapters;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.dutchaug.levelizer.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,19 +1,19 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.activities;
 
 import android.Manifest;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.dutchaug.levelizer.adapters.AppsListAdapter;
+import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.util.PackageUtils;
 
 import java.util.List;

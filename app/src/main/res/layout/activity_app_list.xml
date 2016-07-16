@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="org.dutchaug.levelizer.WhitelistActivity">
+    tools:context="org.dutchaug.levelizer.activities.WhitelistActivity">
 
     <ListView
         android:id="@android:id/list"

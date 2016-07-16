@@ -1,4 +1,4 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -18,6 +18,10 @@ import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
+import org.dutchaug.levelizer.adapters.AppsListAdapter;
+import org.dutchaug.levelizer.services.CameraDetectionService;
+import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.util.PackageUtils;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.activities;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
@@ -17,15 +17,18 @@ import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.dutchaug.levelizer.services.CameraDetectionService;
+import org.dutchaug.levelizer.R;
+
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class OnboardingActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = OnboardingActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.tv_service)
     TextView mTvService;
