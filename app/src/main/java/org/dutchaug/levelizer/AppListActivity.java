@@ -29,13 +29,9 @@ public class AppListActivity extends AppCompatActivity {
     @BindView(android.R.id.empty)
     protected TextView mListEmpty;
 
-    @BindView(R.id.whitelist_add_btn)
-    protected FloatingActionButton mAddApp;
-
     private AppsListAdapter mAdapter;
 
     private PackageManager mPackageManager;
-    private LayoutInflater mLayoutInflater;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,6 @@ public class AppListActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        mLayoutInflater = LayoutInflater.from(this);
         mPackageManager = getPackageManager();
 
         mAdapter = new AppsListAdapter(this);
@@ -69,12 +64,6 @@ public class AppListActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-    }
-
-    public void showAddAppDialogFragment(){
-
     }
 
     @Override

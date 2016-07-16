@@ -35,7 +35,7 @@ public class WhitelistActivity extends AppCompatActivity {
     @BindView(android.R.id.empty)
     protected TextView mListEmpty;
 
-    @BindView(R.id.bt_fab)
+    @BindView(R.id.fab)
     protected FloatingActionButton mFab;
 
     private AppsListAdapter mAdapter;
@@ -93,6 +93,7 @@ public class WhitelistActivity extends AppCompatActivity {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(app + packageName));
                         startActivity(intent);
                     } catch (ActivityNotFoundException e2) {
+                        // Google Play not installed; open browser
                         String web = "http://play.google.com/store/apps/details?id=";
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(web + packageName));
                         startActivity(intent);
@@ -102,7 +103,7 @@ public class WhitelistActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.bt_fab)
+    @OnClick(R.id.fab)
     public void onClickFab() {
         startActivity(new Intent(this, AppListActivity.class));
     }
