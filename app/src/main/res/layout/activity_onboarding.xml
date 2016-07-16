@@ -1,122 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <include layout="@layout/in_introduction"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="8dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="64dp"
-                    android:layout_marginRight="16dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ic_launcher_large"
-                    tools:ignore="ContentDescription,RtlHardcoded"/>
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/about_description"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"/>
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_service"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/onboarding_accessibility"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:minHeight="8dp"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/bt_service"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/enable"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey"/>
+                    <TextView
+                        android:id="@+id/tv_toggle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Levelizer is currently enabled."
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                        android:visibility="gone"/>
 
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:minHeight="8dp"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/bt_toggle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Disable"
+                        android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_service"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/onboarding_accessibility"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
+                </LinearLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/bt_service"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/enable"/>
+            </android.support.v7.widget.CardView>
 
-            <TextView
-                android:id="@+id/tv_toggle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Levelizer is currently enabled."
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                android:visibility="gone"/>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/bt_toggle"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Disable"
-                android:visibility="gone"/>
+                app:cardCornerRadius="8dp">
 
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:minHeight="8dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/onboarding_whitelist"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
-            <android.support.v4.widget.Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:minHeight="8dp"/>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/bt_whitelist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/camera_whitelist"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/onboarding_whitelist"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
+                </LinearLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/bt_whitelist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/camera_whitelist"/>
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 

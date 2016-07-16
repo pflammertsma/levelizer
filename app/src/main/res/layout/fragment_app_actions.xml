@@ -9,25 +9,23 @@
     tools:context="org.dutchaug.levelizer.activities.WhitelistActivity">
 
     <TextView
+        android:id="@+id/bt_launch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
+        android:minHeight="48dp"
         android:padding="16dp"
-        android:text="@string/add_app_explanation"
+        android:text="Launch"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
     <TextView
-        android:id="@android:id/empty"
+        android:id="@+id/bt_remove"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_apps_found"
-        android:visibility="gone"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:minHeight="48dp"
+        android:padding="16dp"
+        android:text="Remove from whitelist"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
 </LinearLayout>
