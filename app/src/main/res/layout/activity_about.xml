@@ -17,14 +17,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:text="@string/contributors"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <LinearLayout
             android:id="@+id/vg_about_paul"
+            style="@style/Row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -48,9 +49,9 @@
 
         <LinearLayout
             android:id="@+id/vg_about_martin"
+            style="@style/Row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -74,9 +75,9 @@
 
         <LinearLayout
             android:id="@+id/vg_about_frank"
+            style="@style/Row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -101,15 +102,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="20dp"
             android:text="Libraries"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <LinearLayout
             android:id="@+id/vg_about_butter_knife"
+            style="@style/Row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -146,9 +148,9 @@
 
         <LinearLayout
             android:id="@+id/vg_about_easyprefs"
+            style="@style/Row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -186,14 +188,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="20dp"
             android:text="Source"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <TextView
+            style="@style/Row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:autoLink="web"
             android:text="https://github.com/pflammertsma/levelizer"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
