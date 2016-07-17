@@ -3,12 +3,15 @@ package org.dutchaug.levelizer.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,10 +72,14 @@ public class InstructionsFragment extends DialogFragment {
     @OnClick(R.id.bt_continue)
     protected void onClickContinue() {
         if (mViewSwitcher.getDisplayedChild() == mViewSwitcher.getChildCount() - 1) {
+            FragmentActivity activity = getActivity();
+            if (activity instanceof InstructionsFragment.Callback) {
+                ((Callback) activity).onEnterAccessibility();
+            }
+            dismiss();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            dismiss();
         } else {
             mViewSwitcher.showNext();
         }
@@ -131,6 +138,21 @@ public class InstructionsFragment extends DialogFragment {
                 anim1.start();
                 break;
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        final Activity activity = getActivity();
+        if (activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
+        }
+    }
+
+    public interface Callback {
+
+        void onEnterAccessibility();
+
     }
 
 }

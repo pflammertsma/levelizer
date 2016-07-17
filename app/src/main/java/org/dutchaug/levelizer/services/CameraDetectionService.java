@@ -6,26 +6,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.dutchaug.levelizer.activities.MainActivity;
 import org.dutchaug.levelizer.util.WhitelistManager;
-
-import java.util.Set;
 
 
 public class CameraDetectionService extends AccessibilityService {
 
     public static final String ACTION_STATE_CHANGE = "state_change";
+
     public static final String PREF_ENABLED = "enabled";
+    public static final String PREF_FIRST_RESPONSE = "first_response";
 
     private static final String TAG = CameraDetectionService.class.getSimpleName();
 
     private static final String PACKAGE_SYSTEMUI = "com.android.systemui";
+    private static final String PACKAGE_SETTINGS = "com.android.settings";
 
     private String mLastPackageName;
 
@@ -91,7 +91,12 @@ public class CameraDetectionService extends AccessibilityService {
         }
 
         if (packageName != null) {
-            if (packageName.equals(PACKAGE_SYSTEMUI)) {
+            if (packageName.equals(PACKAGE_SETTINGS) && Prefs.getBoolean(PREF_FIRST_RESPONSE, false)) {
+                Prefs.putBoolean(CameraDetectionService.PREF_FIRST_RESPONSE, false);
+                Intent i = new Intent(this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+            } else if (packageName.equals(PACKAGE_SYSTEMUI)) {
                 // Ignore when the user navigates to the SystemUI
                 pauseLeveler();
                 return;

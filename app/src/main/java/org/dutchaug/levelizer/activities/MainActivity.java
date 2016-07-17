@@ -5,20 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.dutchaug.levelizer.R;
-import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
 import org.dutchaug.levelizer.fragments.InstructionsFragment;
 import org.dutchaug.levelizer.services.CameraDetectionService;
 
@@ -28,21 +31,28 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements InstructionsFragment.Callback {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private static final String KEY_SHOW_ERROR = "show_error";
+
+    @BindView(R.id.cv_service)
+    protected CardView mCvService;
+
     @BindView(R.id.tv_service)
-    TextView mTvService;
+    protected TextView mTvService;
 
     @BindView(R.id.bt_service)
-    Button mBtService;
+    protected Button mBtService;
 
     @BindView(R.id.tv_toggle)
-    TextView mTvToggle;
+    protected TextView mTvToggle;
 
     @BindView(R.id.bt_toggle)
-    Button mBtToggle;
+    protected Button mBtToggle;
+
+    private boolean mShowError = true;
 
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
@@ -56,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mShowError = savedInstanceState.getBoolean(KEY_SHOW_ERROR, true);
+        }
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
@@ -65,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         checkAccessibilityStatus();
         mHandler.postDelayed(mRunnable, 1000);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putBoolean(KEY_SHOW_ERROR, mShowError);
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
@@ -130,6 +151,12 @@ public class MainActivity extends AppCompatActivity {
             mTvToggle.setVisibility(View.VISIBLE);
             mBtToggle.setVisibility(View.VISIBLE);
         } else {
+            if (mShowError) {
+                mShowError = false;
+                // Show animation
+                Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+                mCvService.startAnimation(shake);
+            }
             mTvService.setVisibility(View.VISIBLE);
             mBtService.setVisibility(View.VISIBLE);
             mTvToggle.setVisibility(View.GONE);
@@ -141,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onClickService() {
         FragmentManager fm = getSupportFragmentManager();
         InstructionsFragment dialog = InstructionsFragment.create();
-        dialog.show(fm, AddAppDialogFragment.TAG);
+        dialog.show(fm, InstructionsFragment.TAG);
     }
 
     @OnClick(R.id.bt_toggle)
@@ -155,6 +182,13 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.bt_whitelist)
     protected void onClickWhitelist() {
         startActivity(new Intent(getApplicationContext(), WhitelistActivity.class));
+    }
+
+    @Override
+    public void onEnterAccessibility() {
+        mShowError = true;
+        Prefs.putBoolean(CameraDetectionService.PREF_FIRST_RESPONSE, true);
+        Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, true);
     }
 
 }
