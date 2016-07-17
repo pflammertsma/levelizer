@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/dialogBackground"
     android:orientation="vertical">
 
     <ViewSwitcher
@@ -14,14 +16,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/dialogBackground"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:src="@drawable/im_instruction1"/>
+                android:src="@drawable/im_instruction1"
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -37,14 +41,32 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/dialogBackground"
             android:orientation="vertical">
 
-            <ImageView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/im_instruction2"/>
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_instruction2a"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/im_instruction2"
+                    tools:ignore="ContentDescription"/>
+
+                <ImageView
+                    android:id="@+id/iv_instruction2b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/im_instruction3"
+                    android:visibility="invisible"
+                    tools:ignore="ContentDescription"/>
+
+            </FrameLayout>
 
             <TextView
                 android:layout_width="match_parent"

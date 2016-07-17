@@ -1,5 +1,8 @@
 package org.dutchaug.levelizer.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
 import org.dutchaug.levelizer.R;
@@ -27,6 +31,12 @@ public class InstructionsFragment extends DialogFragment {
 
     @BindView(R.id.bt_continue)
     protected Button mBtContinue;
+
+    @BindView(R.id.iv_instruction2a)
+    protected ImageView mIvInstruction2a;
+
+    @BindView(R.id.iv_instruction2b)
+    protected ImageView mIvInstruction2b;
 
 
     public static InstructionsFragment create() {
@@ -66,10 +76,60 @@ public class InstructionsFragment extends DialogFragment {
         } else {
             mViewSwitcher.showNext();
         }
-        if (mViewSwitcher.getDisplayedChild() == mViewSwitcher.getChildCount() - 1) {
-            mBtContinue.setText(R.string.instructions_done);
-        } else {
-            mBtContinue.setText(R.string.instructions_continue);
+        switch (mViewSwitcher.getDisplayedChild()) {
+            case 0:
+                mBtContinue.setText(R.string.instructions_continue);
+            case 1:
+                mBtContinue.setText(R.string.instructions_done);
+                final ObjectAnimator anim1 = ObjectAnimator.ofFloat(mIvInstruction2b, View.ALPHA, 0, 1);
+                anim1.setStartDelay(1000);
+                anim1.setDuration(500);
+                final ObjectAnimator anim2 = ObjectAnimator.ofFloat(mIvInstruction2b, View.ALPHA, 1, 0);
+                anim2.setStartDelay(1000);
+                anim2.setDuration(500);
+                anim1.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mIvInstruction2b.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        anim2.start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                });
+
+                anim2.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mIvInstruction2b.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        anim1.setStartDelay(500);
+                        anim1.start();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+                    }
+                });
+
+                anim1.start();
+                break;
         }
     }
 
