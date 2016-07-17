@@ -94,7 +94,8 @@ public class CameraDetectionService extends AccessibilityService {
             if (packageName.equals(PACKAGE_SETTINGS) && Prefs.getBoolean(PREF_FIRST_RESPONSE, false)) {
                 Prefs.putBoolean(CameraDetectionService.PREF_FIRST_RESPONSE, false);
                 Intent i = new Intent(this, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                i.putExtra(MainActivity.EXTRA_SHOW_SUCCESS, true);
                 startActivity(i);
             } else if (packageName.equals(PACKAGE_SYSTEMUI)) {
                 // Ignore when the user navigates to the SystemUI

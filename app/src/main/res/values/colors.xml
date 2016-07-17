@@ -7,4 +7,5 @@
     <color name="colorPrimaryDim">#800083e5</color>
     <color name="colorPrimaryDarkDim">#80005698</color>
     <color name="dialogBackground">#fff</color>
+    <color name="green">#448400</color>
 </resources>

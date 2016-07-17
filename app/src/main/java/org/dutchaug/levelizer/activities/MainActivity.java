@@ -2,11 +2,13 @@ package org.dutchaug.levelizer.activities;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -35,7 +37,10 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private static final String KEY_SHOW_SUCCESS = "show_success";
     private static final String KEY_SHOW_ERROR = "show_error";
+
+    public static final String EXTRA_SHOW_SUCCESS = "show_success";
 
     @BindView(R.id.cv_service)
     protected CardView mCvService;
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.bt_toggle)
     protected Button mBtToggle;
 
+    private boolean mShowSuccess = false;
     private boolean mShowError = true;
 
     private Handler mHandler = new Handler();
@@ -67,7 +73,12 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            mShowSuccess = intent.getBooleanExtra(EXTRA_SHOW_SUCCESS, mShowSuccess);
+        }
         if (savedInstanceState != null) {
+            mShowSuccess = savedInstanceState.getBoolean(KEY_SHOW_SUCCESS, true);
             mShowError = savedInstanceState.getBoolean(KEY_SHOW_ERROR, true);
         }
 
@@ -84,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putBoolean(KEY_SHOW_SUCCESS, mShowSuccess);
         outState.putBoolean(KEY_SHOW_ERROR, mShowError);
         super.onSaveInstanceState(outState, outPersistentState);
     }
@@ -136,17 +148,28 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     private void onAccessibilityStatus(boolean serviceEnabled) {
         Log.d(TAG, "accessibility service " + (serviceEnabled ? "enabled" : "disabled"));
-        mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable);
+        mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable_service);
         mBtService.setEnabled(!serviceEnabled);
         if (serviceEnabled) {
+            if (mShowSuccess) {
+                mShowSuccess = false;
+                new AlertDialog.Builder(this)
+                        .setView(R.layout.fragment_success)
+                        .setPositiveButton(R.string.instructions_great, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
+            }
             mTvService.setVisibility(View.GONE);
             mBtService.setVisibility(View.GONE);
             if (Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true)) {
-                mTvToggle.setText("Levelizer is currently enabled.");
-                mBtToggle.setText("Disable");
+                mTvToggle.setText(R.string.status_enabled);
+                mBtToggle.setText(R.string.disable);
             } else {
-                mTvToggle.setText("Levelizer is currently disabled.");
-                mBtToggle.setText("Enable");
+                mTvToggle.setText(R.string.status_disabled);
+                mBtToggle.setText(R.string.enable);
             }
             mTvToggle.setVisibility(View.VISIBLE);
             mBtToggle.setVisibility(View.VISIBLE);
@@ -187,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @Override
     public void onEnterAccessibility() {
         mShowError = true;
+        mShowSuccess = true;
         Prefs.putBoolean(CameraDetectionService.PREF_FIRST_RESPONSE, true);
         Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, true);
     }

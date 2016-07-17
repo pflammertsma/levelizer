@@ -53,6 +53,8 @@ android {
         versionCode 3
         versionName "1.0.1"
 
+        vectorDrawables.useSupportLibrary = true
+
         buildConfigField("boolean", "DEBUG_SHOW_TOASTS", "false")
         buildConfigField("boolean", "DEBUG_LOG", "false")
 
