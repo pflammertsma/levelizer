@@ -12,7 +12,7 @@
 
     <string name="onboarding_title">Onboarding</string>
     <string name="onboarding_all_done">All done!</string>
-    <string name="onboarding_accessibility">Levelizer needs Accesibility permission to work. Please enable it now.</string>
+    <string name="onboarding_accessibility">Levelizer needs accessibility permissions in order to work. Please enable it.</string>
 
     <string name="enable">Enable accessibility service</string>
     <string name="status">Status: %1$s</string>
