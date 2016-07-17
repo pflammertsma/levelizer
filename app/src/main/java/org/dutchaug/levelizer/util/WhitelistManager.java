@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.support.annotation.NonNull;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.dutchaug.levelizer.services.CameraDetectionService;
@@ -49,6 +51,9 @@ public class WhitelistManager {
         if (!sWhitelist.contains(packageName)) {
             sWhitelist.add(packageName);
         }
+        Answers.getInstance().logCustom(
+                new CustomEvent("whitelist add")
+                        .putCustomAttribute("package name", packageName));
         save(context);
     }
 
@@ -61,6 +66,9 @@ public class WhitelistManager {
     public static void remove(Context context, String packageName) {
         get(context);
         sWhitelist.remove(packageName);
+        Answers.getInstance().logCustom(
+                new CustomEvent("whitelist remove")
+                        .putCustomAttribute("package name", packageName));
         save(context);
     }
 

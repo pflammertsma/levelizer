@@ -19,7 +19,7 @@
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
 
-    <string name="onboarding_whitelist">Is Levelizer not working with your camera app? Add it to the whitelist.</string>
+    <string name="onboarding_whitelist">Is Levelizer not detecting your camera app? Add it to the whitelist.</string>
     <string name="whitelist_explanation">Add camera apps to the whitelist to make sure Levelizer works with them.</string>
     <string name="camera_whitelist">Camera whitelist</string>
     <string name="whitelist_is_empty">Whitelist is empty</string>
