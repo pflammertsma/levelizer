@@ -151,6 +151,10 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable_service);
         mBtService.setEnabled(!serviceEnabled);
         if (serviceEnabled) {
+            Animation animation = mCvService.getAnimation();
+            if (animation != null) {
+                animation.cancel();
+            }
             if (mShowSuccess) {
                 mShowSuccess = false;
                 new AlertDialog.Builder(this)
