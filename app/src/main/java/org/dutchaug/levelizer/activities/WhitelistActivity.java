@@ -98,7 +98,7 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
     @OnClick(R.id.fab)
     public void onClickFab() {
         FragmentManager fm = getSupportFragmentManager();
-        AddAppDialogFragment dialog = new AddAppDialogFragment();
+        AddAppDialogFragment dialog = AddAppDialogFragment.create();
         dialog.show(fm, AddAppDialogFragment.TAG);
     }
 

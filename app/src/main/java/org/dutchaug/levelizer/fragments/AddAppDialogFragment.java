@@ -34,6 +34,11 @@ public class AddAppDialogFragment extends DialogFragment {
     @BindView(android.R.id.empty)
     protected TextView mListEmpty;
 
+
+    public static AddAppDialogFragment create() {
+        return new AddAppDialogFragment();
+    }
+
     public AddAppDialogFragment() {
         //no argument constructor
     }

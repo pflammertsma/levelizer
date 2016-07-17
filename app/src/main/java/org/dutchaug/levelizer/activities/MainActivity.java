@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.dutchaug.levelizer.R;
+import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
+import org.dutchaug.levelizer.fragments.InstructionsFragment;
 import org.dutchaug.levelizer.services.CameraDetectionService;
 
 import java.util.List;
@@ -137,9 +139,9 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.bt_service)
     protected void onClickService() {
-        Intent i = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
+        FragmentManager fm = getSupportFragmentManager();
+        InstructionsFragment dialog = InstructionsFragment.create();
+        dialog.show(fm, AddAppDialogFragment.TAG);
     }
 
     @OnClick(R.id.bt_toggle)
