@@ -37,35 +37,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:id="@+id/tv_service"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
                         android:text="@string/onboarding_accessibility"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/bt_service"
+                        style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:text="@string/enable"/>
 
                     <TextView
                         android:id="@+id/tv_toggle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
                         android:text="Levelizer is currently enabled."
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                         android:visibility="gone"/>
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/bt_toggle"
+                        style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:text="Disable"
                         android:visibility="gone"/>
 
@@ -83,19 +85,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="8dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
                         android:text="@string/onboarding_whitelist"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/bt_whitelist"
+                        style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:text="@string/camera_whitelist"/>
 
                 </LinearLayout>
