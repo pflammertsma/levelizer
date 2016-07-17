@@ -104,7 +104,7 @@ public class LevelizerService extends Service {
         Intent intent = new Intent(this, LevelizerService.class);
         intent.putExtra(EXTRA_STOP, true);
         PendingIntent pi = PendingIntent.getService(this, REQUEST_CODE,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = new NotificationCompat.Builder(this)
                 .setContentIntent(pi)
                 .setContentTitle(getString(R.string.app_name))
@@ -125,7 +125,7 @@ public class LevelizerService extends Service {
             Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (rotationSensor != null) {
                 sensorManager.registerListener(mSensorEventListener, rotationSensor,
-                        SensorManager.SENSOR_DELAY_NORMAL);
+                                               SensorManager.SENSOR_DELAY_NORMAL);
             } else {
                 // TODO show an error??
             }

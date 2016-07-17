@@ -23,9 +23,6 @@
             android:name=".activities.WhitelistActivity"
             android:label="@string/camera_whitelist"/>
         <activity
-            android:name=".activities.AppListActivity"
-            android:label="@string/app_list"/>
-        <activity
             android:name=".activities.AboutActivity"
             android:label="@string/about_title"/>
         <activity-alias

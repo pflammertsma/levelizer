@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
-import org.dutchaug.levelizer.services.CameraDetectionService;
 import org.dutchaug.levelizer.R;
+import org.dutchaug.levelizer.services.CameraDetectionService;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_onboarding);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
 
@@ -146,9 +146,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onClickToggle() {
         boolean enabled = !Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
         Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, enabled);
-        Intent i = new Intent(CameraDetectionService.ACTION_STATE_CHANGE);
-        i.putExtra(CameraDetectionService.EXTRA_ENABLED, enabled);
-        sendBroadcast(i);
+        CameraDetectionService.notifyStateChange(this);
         checkAccessibilityStatus();
     }
 

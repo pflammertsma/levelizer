@@ -3,8 +3,9 @@ package org.dutchaug.levelizer;
 import android.app.Application;
 import android.content.ContextWrapper;
 
-import com.pixplicity.easyprefs.library.Prefs;
 import com.crashlytics.android.Crashlytics;
+import com.pixplicity.easyprefs.library.Prefs;
+
 import io.fabric.sdk.android.Fabric;
 
 

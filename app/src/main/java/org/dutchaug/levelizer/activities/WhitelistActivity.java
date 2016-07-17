@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,18 +17,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pixplicity.easyprefs.library.BuildConfig;
 import com.pixplicity.easyprefs.library.Prefs;
 
-import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
-import org.dutchaug.levelizer.adapters.AppsListAdapter;
-import org.dutchaug.levelizer.services.CameraDetectionService;
 import org.dutchaug.levelizer.R;
+import org.dutchaug.levelizer.adapters.AppsListAdapter;
+import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
 import org.dutchaug.levelizer.util.PackageUtils;
 import org.dutchaug.levelizer.util.WhitelistManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +53,11 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
         setContentView(R.layout.activity_whitelist);
         ButterKnife.bind(this);
 
+        if (BuildConfig.DEBUG) {
+            // FIXME TEMPRORARY
+            Prefs.remove(WhitelistManager.PREFS_WHITELIST);
+        }
+
         setTitle(R.string.camera_whitelist);
 
         ActionBar actionBar = getSupportActionBar();
@@ -67,19 +70,8 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
         mPackageManager = getPackageManager();
 
         mAdapter = new AppsListAdapter(this);
-
-        List<String> whitelistPackageNames = new ArrayList<>();
-        // Fill the preset ones
-        whitelistPackageNames.addAll(CameraDetectionService.getCameraApps());
-        // Also add the user ones
-        Set<String> userPackageNames = WhitelistManager.get();
-        if (userPackageNames != null) {
-            whitelistPackageNames.addAll(userPackageNames);
-        }
-        List<PackageInfo> apps = PackageUtils.getPackageInfos(mPackageManager, whitelistPackageNames);
-        mAdapter.setData(apps);
-
         mListView.setAdapter(mAdapter);
+        refreshAppList();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -111,6 +103,13 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
         });
     }
 
+    private void refreshAppList() {
+        List<String> whitelistPackageNames = new ArrayList<>();
+        whitelistPackageNames.addAll(WhitelistManager.get());
+        List<PackageInfo> apps = PackageUtils.getPackageInfos(mPackageManager, whitelistPackageNames);
+        mAdapter.setData(apps);
+    }
+
     @OnClick(R.id.fab)
     public void onClickFab() {
         FragmentManager fm = getSupportFragmentManager();
@@ -140,7 +139,7 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
-
+        refreshAppList();
     }
 
 }

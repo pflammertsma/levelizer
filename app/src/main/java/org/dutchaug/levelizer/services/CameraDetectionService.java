@@ -6,41 +6,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import com.pixplicity.easyprefs.library.Prefs;
 
-import java.util.Arrays;
-import java.util.List;
+import org.dutchaug.levelizer.util.WhitelistManager;
 
 
 public class CameraDetectionService extends AccessibilityService {
 
     public static final String ACTION_STATE_CHANGE = "state_change";
     public static final String PREF_ENABLED = "enabled";
-    public static final String EXTRA_ENABLED = "enabled";
 
     private static final String TAG = CameraDetectionService.class.getSimpleName();
-    private static final String[] CAMERA_APPS_ARRAY = new String[]{
-            "com.android.camera",
-            "com.google.android.GoogleCamera",
-            "com.google.vr.cyclops",
-            "com.flavionet.android.camera.pro",
-            "net.sourceforge.opencamera",
-            "com.motorola.camera",
-            "com.lge.camera",
-            "com.sec.android.app.camera",
-            "com.htc.camera",
-            };
-    private static final List<String> CAMERA_APPS_LIST = Arrays.asList(CAMERA_APPS_ARRAY);
 
     private static final String PACKAGE_SYSTEMUI = "com.android.systemui";
-
-    /**
-     * It'd be nice if this worked, but we can't detect when the camera app is closed.
-     */
-    private static final boolean FILTER_WITH_CAMERA_WHITELIST = false;
 
     private String mLastPackageName;
 
@@ -63,6 +46,7 @@ public class CameraDetectionService extends AccessibilityService {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: " + intent.getAction());
             if (intent.getAction().equals(ACTION_STATE_CHANGE)) {
+                Toast.makeText(getApplicationContext(), TextUtils.join("\n", WhitelistManager.get()), Toast.LENGTH_LONG).show();
                 // Enable or disable this accessibility service
                 setServiceInfo();
             }
@@ -70,8 +54,8 @@ public class CameraDetectionService extends AccessibilityService {
     };
 
 
-    public static List<String> getCameraApps() {
-        return CAMERA_APPS_LIST;
+    public static void notifyStateChange(Context context) {
+        context.sendBroadcast(new Intent(CameraDetectionService.ACTION_STATE_CHANGE));
     }
 
     @Override
@@ -114,7 +98,7 @@ public class CameraDetectionService extends AccessibilityService {
                 // Ignore when the same app returns; e.g. when the user opens the notification tray
                 resumeLeveler();
                 return;
-            } else if (CAMERA_APPS_LIST.contains(packageName)) {
+            } else if (WhitelistManager.get().contains(packageName)) {
                 Log.d(TAG, "camera app: " + packageName);
                 startLevelizer();
             } else {
@@ -152,13 +136,6 @@ public class CameraDetectionService extends AccessibilityService {
             // won't be passed to this service.
             info.eventTypes = AccessibilityEvent.TYPE_WINDOWS_CHANGED
                     | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
-
-            if (FILTER_WITH_CAMERA_WHITELIST) {
-                // If you only want this service to work with specific applications, set their
-                // package names here.  Otherwise, when the service is activated, it will listen
-                // to events from all applications.
-                info.packageNames = CAMERA_APPS_ARRAY;
-            }
 
             // Default services are invoked only if no package-specific ones are present
             // for the type of AccessibilityEvent generated.  This service *is*

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.adapters.AppsListAdapter;
@@ -35,7 +34,7 @@ public class AddAppDialogFragment extends DialogFragment {
     @BindView(android.R.id.empty)
     protected TextView mListEmpty;
 
-    public AddAppDialogFragment(){
+    public AddAppDialogFragment() {
         //no argument constructor
     }
 
@@ -55,8 +54,7 @@ public class AddAppDialogFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PackageInfo packageInfo = (PackageInfo) adapterView.getAdapter().getItem(i);
-                WhitelistManager.add(packageInfo);
-                Toast.makeText(getContext(), "TODO: add " + packageInfo, Toast.LENGTH_SHORT).show();
+                WhitelistManager.add(getContext(), packageInfo);
                 getDialog().dismiss();
             }
         });

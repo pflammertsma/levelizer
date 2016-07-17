@@ -34,6 +34,7 @@ public class AppsListAdapter extends BaseAdapter {
 
     public void setData(List<PackageInfo> packages) {
         mPackages = packages;
+        notifyDataSetChanged();
     }
 
     @Override
