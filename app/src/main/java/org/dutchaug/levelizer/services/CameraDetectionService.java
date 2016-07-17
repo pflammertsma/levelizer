@@ -15,6 +15,8 @@ import com.pixplicity.easyprefs.library.Prefs;
 
 import org.dutchaug.levelizer.util.WhitelistManager;
 
+import java.util.Set;
+
 
 public class CameraDetectionService extends AccessibilityService {
 
@@ -46,7 +48,6 @@ public class CameraDetectionService extends AccessibilityService {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: " + intent.getAction());
             if (intent.getAction().equals(ACTION_STATE_CHANGE)) {
-                Toast.makeText(getApplicationContext(), TextUtils.join("\n", WhitelistManager.get()), Toast.LENGTH_LONG).show();
                 // Enable or disable this accessibility service
                 setServiceInfo();
             }
@@ -98,7 +99,7 @@ public class CameraDetectionService extends AccessibilityService {
                 // Ignore when the same app returns; e.g. when the user opens the notification tray
                 resumeLeveler();
                 return;
-            } else if (WhitelistManager.get().contains(packageName)) {
+            } else if (WhitelistManager.get(this).contains(packageName)) {
                 Log.d(TAG, "camera app: " + packageName);
                 startLevelizer();
             } else {

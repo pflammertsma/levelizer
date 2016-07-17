@@ -7,7 +7,7 @@
     android:padding="6dip">
 
     <ImageView
-        android:id="@+id/listiem_icon"
+        android:id="@+id/iv_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginRight="8dp"
@@ -21,7 +21,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/listitem_firstline"
+            android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
@@ -30,7 +30,7 @@
             tools:text="App name"/>
 
         <TextView
-            android:id="@+id/listitem_secondline"
+            android:id="@+id/tv_package_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"

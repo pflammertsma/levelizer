@@ -41,7 +41,7 @@ public class AddAppDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_app_list, null, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_app_list, container, true);
         ButterKnife.bind(this, view);
 
         List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(

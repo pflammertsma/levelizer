@@ -31,31 +31,37 @@ public class WhitelistManager {
     private static Set<String> sWhitelist;
 
     @NonNull
-    public static Set<String> get() {
+    public static Set<String> get(Context context) {
         if (sWhitelist == null) {
             sWhitelist = Prefs.getOrderedStringSet(PREFS_WHITELIST, null);
             if (sWhitelist == null) {
                 sWhitelist = new HashSet<>();
                 Collections.addAll(sWhitelist, CAMERA_APPS_ARRAY);
-                save();
+                save(context);
             }
         }
         return sWhitelist;
     }
 
     public static void add(Context context, PackageInfo packageInfo) {
-        get();
+        get(context);
         String packageName = packageInfo.packageName;
         if (!sWhitelist.contains(packageName)) {
             sWhitelist.add(packageName);
         }
-        save();
+        save(context);
+    }
+
+    private static void save(Context context) {
+        Prefs.putOrderedStringSet(PREFS_WHITELIST, sWhitelist);
         // Inform CameraDetectionService of changes
         CameraDetectionService.notifyStateChange(context);
     }
 
-    private static void save() {
-        Prefs.putOrderedStringSet(PREFS_WHITELIST, sWhitelist);
+    public static void remove(Context context, String packageName) {
+        get(context);
+        sWhitelist.remove(packageName);
+        save(context);
     }
 
 }

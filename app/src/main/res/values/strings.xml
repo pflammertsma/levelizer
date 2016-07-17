@@ -33,4 +33,7 @@
     <string name="whitelist_explanation_placeholder">The following camera apps are supported by Levelizer:</string>
     <string name="camera_whitelist_placeholder">Supported cameras</string>
     <string name="add_app_explanation">Select one of the following apps that uses the camera permission:</string>
+    <string name="install">Install app</string>
+    <string name="launch">Launch app</string>
+    <string name="remove">Remove from whitelist</string>
 </resources>

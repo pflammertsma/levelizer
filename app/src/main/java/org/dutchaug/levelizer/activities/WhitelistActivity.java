@@ -23,6 +23,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.adapters.AppsListAdapter;
 import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
+import org.dutchaug.levelizer.fragments.AppContextDialogFragment;
 import org.dutchaug.levelizer.util.PackageUtils;
 import org.dutchaug.levelizer.util.WhitelistManager;
 
@@ -80,32 +81,16 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
                 if (packageInfo == null) {
                     return;
                 }
-                String packageName = packageInfo.packageName;
-                try {
-                    PackageInfo internalPackageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-                    // App is installed; launch it
-                    Intent intent = mPackageManager.getLaunchIntentForPackage(internalPackageInfo.packageName);
-                    startActivity(intent);
-                } catch (PackageManager.NameNotFoundException e) {
-                    // App is not installed; open Google Play Store
-                    try {
-                        String app = "market://details?id=";
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(app + packageName));
-                        startActivity(intent);
-                    } catch (ActivityNotFoundException e2) {
-                        // Google Play not installed; open browser
-                        String web = "http://play.google.com/store/apps/details?id=";
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(web + packageName));
-                        startActivity(intent);
-                    }
-                }
+                FragmentManager fm = getSupportFragmentManager();
+                AppContextDialogFragment dialog = AppContextDialogFragment.create(packageInfo.packageName);
+                dialog.show(fm, AppContextDialogFragment.TAG);
             }
         });
     }
 
     private void refreshAppList() {
         List<String> whitelistPackageNames = new ArrayList<>();
-        whitelistPackageNames.addAll(WhitelistManager.get());
+        whitelistPackageNames.addAll(WhitelistManager.get(this));
         List<PackageInfo> apps = PackageUtils.getPackageInfos(mPackageManager, whitelistPackageNames);
         mAdapter.setData(apps);
     }

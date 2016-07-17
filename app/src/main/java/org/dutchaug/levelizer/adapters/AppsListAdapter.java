@@ -55,42 +55,42 @@ public class AppsListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
-            view = mLayoutInflater.inflate(R.layout.listitem, viewGroup, false);
+            view = mLayoutInflater.inflate(R.layout.list_app, viewGroup, false);
             ListItemViewHolder vh = new ListItemViewHolder(view);
             view.setTag(vh);
         }
 
         ListItemViewHolder viewHolder = (ListItemViewHolder) view.getTag();
 
-        PackageInfo pkg = (PackageInfo) getItem(i);
-        String packageName = pkg.packageName;
-        viewHolder.secondLine.setText(packageName);
+        PackageInfo packageInfo = (PackageInfo) getItem(i);
+        String packageName = packageInfo.packageName;
+        viewHolder.tvPackageName.setText(packageName);
 
         try {
-            ApplicationInfo appInfo = pkg.applicationInfo;
+            ApplicationInfo appInfo = packageInfo.applicationInfo;
             if (appInfo == null) {
                 mPackageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
             }
             String applicationLabel = mPackageManager.getApplicationLabel(appInfo).toString();
-            viewHolder.firstLine.setText(applicationLabel);
-            viewHolder.firstLine.setAlpha(1f);
-            viewHolder.imageView.setAlpha(1f);
+            viewHolder.tvName.setText(applicationLabel);
+            viewHolder.tvName.setAlpha(1f);
+            viewHolder.tvPackageName.setAlpha(1f);
         } catch (PackageManager.NameNotFoundException e) {
-            viewHolder.firstLine.setText(R.string.not_installed);
-            viewHolder.firstLine.setAlpha(0.5f);
-            viewHolder.imageView.setAlpha(0.5f);
+            viewHolder.tvName.setText(R.string.not_installed);
+            viewHolder.tvName.setAlpha(0.5f);
+            viewHolder.tvPackageName.setAlpha(0.5f);
         }
 
         try {
-            Drawable applicationIcon = pkg.applicationInfo == null
-                    ? null : pkg.applicationInfo.loadIcon(mPackageManager);
+            Drawable applicationIcon = packageInfo.applicationInfo == null
+                    ? null : packageInfo.applicationInfo.loadIcon(mPackageManager);
             if (applicationIcon == null) {
                 mPackageManager.getApplicationIcon(packageName);
             }
-            viewHolder.imageView.setImageDrawable(applicationIcon);
+            viewHolder.ivIcon.setImageDrawable(applicationIcon);
         } catch (PackageManager.NameNotFoundException e) {
             //viewHolder.imageView.setImageDrawable(getDrawable(android.R.drawable.sym_def_app_icon));
-            viewHolder.imageView.setImageDrawable(mPackageManager.getDefaultActivityIcon());
+            viewHolder.ivIcon.setImageDrawable(mPackageManager.getDefaultActivityIcon());
         }
 
         return view;
@@ -98,14 +98,14 @@ public class AppsListAdapter extends BaseAdapter {
 
     class ListItemViewHolder {
 
-        @BindView(R.id.listiem_icon)
-        ImageView imageView;
+        @BindView(R.id.iv_icon)
+        protected ImageView ivIcon;
 
-        @BindView(R.id.listitem_firstline)
-        TextView firstLine;
+        @BindView(R.id.tv_name)
+        protected TextView tvName;
 
-        @BindView(R.id.listitem_secondline)
-        TextView secondLine;
+        @BindView(R.id.tv_package_name)
+        protected TextView tvPackageName;
 
         ListItemViewHolder(View view) {
             ButterKnife.bind(this, view);
