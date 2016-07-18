@@ -25,7 +25,7 @@ android:
     #- extra-google-m2repository
     
 script:
-  - TERM=dumb ./gradlew clean assemble -PdisablePreDex
+  - TERM=dumb ./gradlew clean assembleDebug -PdisablePreDex
 
 notifications:
   email: false
