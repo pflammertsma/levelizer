@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".OnboardingActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -20,17 +20,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WhitelistActivity"
+            android:name=".activities.WhitelistActivity"
             android:label="@string/camera_whitelist"/>
         <activity
-            android:name=".AppListActivity"
-            android:label="@string/app_list"/>
-        <activity
-            android:name=".AboutActivity"
+            android:name=".activities.AboutActivity"
             android:label="@string/about_title"/>
+        <activity-alias
+            android:name=".OnboardingActivity"
+            android:targetActivity=".activities.MainActivity"/>
 
         <service
-            android:name=".CameraDetectionService"
+            android:name=".services.CameraDetectionService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
@@ -40,7 +40,7 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config"/>
         </service>
-        <service android:name=".LevelizerService"/>
+        <service android:name=".services.LevelizerService"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"

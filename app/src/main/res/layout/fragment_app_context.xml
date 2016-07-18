@@ -8,6 +8,8 @@
     android:orientation="vertical"
     tools:context="org.dutchaug.levelizer.activities.WhitelistActivity">
 
+    <include layout="@layout/list_app"/>
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"

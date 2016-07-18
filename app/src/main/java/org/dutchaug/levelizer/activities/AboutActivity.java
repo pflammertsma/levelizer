@@ -1,4 +1,4 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
+import org.dutchaug.levelizer.R;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

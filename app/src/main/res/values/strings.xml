@@ -4,22 +4,32 @@
 
     <string name="notification_text">Levelizer is running; tap to stop</string>
 
-    <string name="accessibility_service_description">Levelizer gives you haptic feedback when you\'re attempting to take an unlevel photo.\n\nThis accessibility service is used to react when a whitelisted camera app is opened.</string>
+    <string name="accessibility_service_description">Levelizer aides you in taking level photos through haptic feedback.\n\nThis accessibility service is used to react when a whitelisted camera app is opened.</string>
 
     <string name="about_title">About Levelizer</string>
     <string name="about_action">About</string>
-    <string name="about_description">Levelizer is an open source Android app that gives you haptic feedback when you\'re attempting to take an unlevel photo.</string>
+    <string name="about_description">Levelizer aides you in taking level photos through haptic feedback. When using your favorite camera app, Levelizer will gently buzz until you\'re holding your phone straight.</string>
 
     <string name="onboarding_title">Onboarding</string>
     <string name="onboarding_all_done">All done!</string>
-    <string name="onboarding_accessibility">Levelizer needs Accesibility permission to work. Please enable it now.</string>
+    <string name="onboarding_accessibility">Levelizer needs accessibility permissions in order to work. Please enable it.</string>
 
-    <string name="enable">Enable accessibility service</string>
+    <string name="enable_service">Enable accessibility service</string>
     <string name="status">Status: %1$s</string>
-    <string name="enabled">Enabled</string>
-    <string name="disabled">Disabled</string>
 
-    <string name="onboarding_whitelist">Is Levelizer not working with your camera app? Add it to the whitelist.</string>
+    <string name="status_enabled">Levelizer is currently enabled.</string>
+    <string name="status_disabled">Levelizer is currently disabled.</string>
+    <string name="disable">Disable</string>
+    <string name="enable">Enable</string>
+
+    <string name="instruction1">In the following screen, locate Levelizer under accessibility services and tap on it.</string>
+    <string name="instruction2">Flip the switch to the on position and you\'re done!</string>
+    <string name="instructions_continue">Continue</string>
+    <string name="instructions_done">Got it!</string>
+    <string name="instructions_success">You\'re done! Levelizer will now give haptic feedback for camera apps on your whitelist.</string>
+    <string name="instructions_great">Great!</string>
+
+    <string name="onboarding_whitelist">Is Levelizer not detecting your camera app? Add it to the whitelist.</string>
     <string name="whitelist_explanation">Add camera apps to the whitelist to make sure Levelizer works with them.</string>
     <string name="camera_whitelist">Camera whitelist</string>
     <string name="whitelist_is_empty">Whitelist is empty</string>
@@ -28,8 +38,8 @@
     <string name="app_list">App list</string>
     <string name="contributors">Contributors</string>
 
-    <!-- FIXME temporary, until whitelisting is supported -->
-    <string name="onboarding_whitelist_placeholder">Curious which camera apps are supported by Levelizer?</string>
-    <string name="whitelist_explanation_placeholder">The following camera apps are supported by Levelizer:</string>
-    <string name="camera_whitelist_placeholder">Supported cameras</string>
+    <string name="add_app_explanation">Select one of the following apps that uses the camera permission:</string>
+    <string name="install">Install app</string>
+    <string name="launch">Launch app</string>
+    <string name="remove">Remove from whitelist</string>
 </resources>

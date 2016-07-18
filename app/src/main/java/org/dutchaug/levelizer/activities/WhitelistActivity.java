@@ -1,12 +1,14 @@
-package org.dutchaug.levelizer;
+package org.dutchaug.levelizer.activities;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -15,18 +17,24 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pixplicity.easyprefs.library.BuildConfig;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.dutchaug.levelizer.R;
+import org.dutchaug.levelizer.adapters.AppsListAdapter;
+import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
+import org.dutchaug.levelizer.fragments.AppContextDialogFragment;
 import org.dutchaug.levelizer.util.PackageUtils;
+import org.dutchaug.levelizer.util.WhitelistManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class WhitelistActivity extends AppCompatActivity {
+public class WhitelistActivity extends AppCompatActivity implements DialogInterface.OnDismissListener {
 
     @BindView(android.R.id.list)
     protected ListView mListView;
@@ -34,7 +42,7 @@ public class WhitelistActivity extends AppCompatActivity {
     @BindView(android.R.id.empty)
     protected TextView mListEmpty;
 
-    @BindView(R.id.whitelist_add_btn)
+    @BindView(R.id.fab)
     protected FloatingActionButton mFab;
 
     private AppsListAdapter mAdapter;
@@ -46,7 +54,12 @@ public class WhitelistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_whitelist);
         ButterKnife.bind(this);
 
-        setTitle(R.string.camera_whitelist_placeholder);
+        if (BuildConfig.DEBUG) {
+            // FIXME TEMPRORARY
+            Prefs.remove(WhitelistManager.PREFS_WHITELIST);
+        }
+
+        setTitle(R.string.camera_whitelist);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -58,19 +71,8 @@ public class WhitelistActivity extends AppCompatActivity {
         mPackageManager = getPackageManager();
 
         mAdapter = new AppsListAdapter(this);
-
-        List<String> whitelistPackageNames = new ArrayList<>();
-        // Fill the preset ones
-        whitelistPackageNames.addAll(CameraDetectionService.getCameraApps());
-        // Also add the user ones
-        Set<String> userPackageNames = Prefs.getOrderedStringSet("whitelist", null);
-        if (userPackageNames != null) {
-            whitelistPackageNames.addAll(userPackageNames);
-        }
-        List<PackageInfo> apps = PackageUtils.getPackageInfos(mPackageManager, whitelistPackageNames);
-        mAdapter.setData(apps);
-
         mListView.setAdapter(mAdapter);
+        refreshAppList();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,30 +81,25 @@ public class WhitelistActivity extends AppCompatActivity {
                 if (packageInfo == null) {
                     return;
                 }
-                String packageName = packageInfo.packageName;
-                try {
-                    PackageInfo internalPackageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-                    // App is installed; launch it
-                    Intent intent = mPackageManager.getLaunchIntentForPackage(internalPackageInfo.packageName);
-                    startActivity(intent);
-                } catch (PackageManager.NameNotFoundException e) {
-                    // App is not installed; open Google Play Store
-                    try {
-                        String app = "market://details?id=";
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(app + packageName));
-                        startActivity(intent);
-                    } catch (ActivityNotFoundException e2) {
-                        String web = "http://play.google.com/store/apps/details?id=";
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(web + packageName));
-                        startActivity(intent);
-                    }
-                }
+                FragmentManager fm = getSupportFragmentManager();
+                AppContextDialogFragment dialog = AppContextDialogFragment.create(packageInfo.packageName);
+                dialog.show(fm, AppContextDialogFragment.TAG);
             }
         });
     }
 
-    public void showAddApp() {
-        startActivity(new Intent(this, AppListActivity.class));
+    private void refreshAppList() {
+        List<String> whitelistPackageNames = new ArrayList<>();
+        whitelistPackageNames.addAll(WhitelistManager.get(this));
+        List<PackageInfo> apps = PackageUtils.getPackageInfos(mPackageManager, whitelistPackageNames);
+        mAdapter.setData(apps);
+    }
+
+    @OnClick(R.id.fab)
+    public void onClickFab() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddAppDialogFragment dialog = AddAppDialogFragment.create();
+        dialog.show(fm, AddAppDialogFragment.TAG);
     }
 
     @Override
@@ -123,6 +120,11 @@ public class WhitelistActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialogInterface) {
+        refreshAppList();
     }
 
 }

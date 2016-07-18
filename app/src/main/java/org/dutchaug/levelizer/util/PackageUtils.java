@@ -63,45 +63,45 @@ public abstract class PackageUtils {
 
     private static void sort(final PackageManager packageManager, List<PackageInfo> packages) {
         Collections.sort(packages, new Comparator<PackageInfo>() {
-                    @Override
-                    public int compare(PackageInfo left, PackageInfo right) {
-                        ApplicationInfo leftApp = left.applicationInfo;
-                        if (leftApp == null) {
-                            try {
-                                leftApp = packageManager.getApplicationInfo(left.packageName, PackageManager.GET_META_DATA);
-                            } catch (PackageManager.NameNotFoundException e) {
-                            }
-                        }
-                        ApplicationInfo rightApp = right.applicationInfo;
-                        if (rightApp == null) {
-                            try {
-                                rightApp = packageManager.getApplicationInfo(right.packageName, PackageManager.GET_META_DATA);
-                            } catch (PackageManager.NameNotFoundException e) {
-                            }
-                        }
-                        int comparisonOffset = 0;
-                        String leftLabel, rightLabel;
-                        if (leftApp == null) {
-                            leftLabel = left.packageName;
-                        } else {
-                            leftLabel = leftApp.loadLabel(packageManager).toString().toLowerCase(Locale.getDefault());
-                        }
-                        if (leftLabel.equals(left.packageName)) {
-                            // Move package names (apps without label) to bottom of list
-                            comparisonOffset += 100;
-                        }
-                        if (rightApp == null) {
-                            rightLabel = right.packageName;
-                        } else {
-                            rightLabel = rightApp.loadLabel(packageManager).toString().toLowerCase(Locale.getDefault());
-                        }
-                        if (rightLabel.equals(right.packageName)) {
-                            // Move package names (apps without label) to bottom of list
-                            comparisonOffset -= 100;
-                        }
-                        return leftLabel.compareTo(rightLabel) + comparisonOffset;
-                    }
-                }
+                             @Override
+                             public int compare(PackageInfo left, PackageInfo right) {
+                                 ApplicationInfo leftApp = left.applicationInfo;
+                                 if (leftApp == null) {
+                                     try {
+                                         leftApp = packageManager.getApplicationInfo(left.packageName, PackageManager.GET_META_DATA);
+                                     } catch (PackageManager.NameNotFoundException e) {
+                                     }
+                                 }
+                                 ApplicationInfo rightApp = right.applicationInfo;
+                                 if (rightApp == null) {
+                                     try {
+                                         rightApp = packageManager.getApplicationInfo(right.packageName, PackageManager.GET_META_DATA);
+                                     } catch (PackageManager.NameNotFoundException e) {
+                                     }
+                                 }
+                                 int comparisonOffset = 0;
+                                 String leftLabel, rightLabel;
+                                 if (leftApp == null) {
+                                     leftLabel = left.packageName;
+                                 } else {
+                                     leftLabel = leftApp.loadLabel(packageManager).toString().toLowerCase(Locale.getDefault());
+                                 }
+                                 if (leftLabel.equals(left.packageName)) {
+                                     // Move package names (apps without label) to bottom of list
+                                     comparisonOffset += 100;
+                                 }
+                                 if (rightApp == null) {
+                                     rightLabel = right.packageName;
+                                 } else {
+                                     rightLabel = rightApp.loadLabel(packageManager).toString().toLowerCase(Locale.getDefault());
+                                 }
+                                 if (rightLabel.equals(right.packageName)) {
+                                     // Move package names (apps without label) to bottom of list
+                                     comparisonOffset -= 100;
+                                 }
+                                 return leftLabel.compareTo(rightLabel) + comparisonOffset;
+                             }
+                         }
         );
     }
 
