@@ -1,11 +1,8 @@
 package org.dutchaug.levelizer.activities;
 
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -16,9 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.pixplicity.easyprefs.library.BuildConfig;
-import com.pixplicity.easyprefs.library.Prefs;
 
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.adapters.AppsListAdapter;
@@ -53,11 +47,6 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_whitelist);
         ButterKnife.bind(this);
-
-        if (BuildConfig.DEBUG) {
-            // FIXME TEMPRORARY
-            Prefs.remove(WhitelistManager.PREFS_WHITELIST);
-        }
 
         setTitle(R.string.camera_whitelist);
 
