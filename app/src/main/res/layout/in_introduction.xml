@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     tools:showIn="@layout/activity_main">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_marginRight="16dp"
@@ -17,7 +17,7 @@
         android:src="@drawable/ic_launcher_large"
         tools:ignore="ContentDescription,RtlHardcoded"/>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/about_description"

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -94,10 +93,10 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+    public void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(KEY_SHOW_SUCCESS, mShowSuccess);
         outState.putBoolean(KEY_SHOW_ERROR, mShowError);
-        super.onSaveInstanceState(outState, outPersistentState);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -157,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             if (mShowSuccess) {
                 mShowSuccess = false;
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(this, R.style.DialogStyle)
                         .setView(R.layout.fragment_success)
                         .setPositiveButton(R.string.instructions_great, new DialogInterface.OnClickListener() {
                             @Override

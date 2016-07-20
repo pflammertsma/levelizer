@@ -50,6 +50,11 @@ public class InstructionsFragment extends DialogFragment {
         //no argument constructor
     }
 
+    @Override
+    public int getTheme() {
+        return R.style.DialogStyle;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,7 +70,7 @@ public class InstructionsFragment extends DialogFragment {
 
         Dialog dialog = getDialog();
         if (dialog != null) {
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
     }
 

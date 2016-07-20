@@ -64,6 +64,11 @@ public class AppContextDialogFragment extends DialogFragment {
     }
 
     @Override
+    public int getTheme() {
+        return R.style.DialogStyle;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPackageManager = getContext().getPackageManager();

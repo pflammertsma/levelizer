@@ -43,6 +43,11 @@ public class AddAppDialogFragment extends DialogFragment {
         //no argument constructor
     }
 
+    @Override
+    public int getTheme() {
+        return R.style.DialogStyle;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
