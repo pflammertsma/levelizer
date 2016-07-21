@@ -19,15 +19,22 @@ public class WhitelistManager {
     public static final String PREFS_WHITELIST = "whitelist";
 
     private static final String[] CAMERA_APPS_ARRAY = new String[]{
+            // Pre-installed cameras
             "com.android.camera",
-            "com.google.android.GoogleCamera",
-            "com.google.vr.cyclops",
-            "com.flavionet.android.camera.pro",
-            "net.sourceforge.opencamera",
             "com.motorola.camera",
+            "com.motorola.cameraone",
             "com.lge.camera",
             "com.sec.android.app.camera",
             "com.htc.camera",
+            "com.huawei.camera",
+            "com.cyngn.cameranext",
+            "com.sec.android.app.camera",
+            // Popular third-party cameras
+            "com.google.android.GoogleCamera",
+            "com.google.vr.cyclops",
+            "com.magix.camera_mx",
+            "com.flavionet.android.camera.pro",
+            "net.sourceforge.opencamera",
             };
 
     private static Set<String> sWhitelist;
