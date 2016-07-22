@@ -31,3 +31,5 @@ The app is designed with battery life in mind.
 ## License
 
 Licensed under the Apache license 2.0.
+
+Google Play and the Google Play logo are trademarks of Google Inc.
