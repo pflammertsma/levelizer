@@ -15,7 +15,6 @@ The app is designed with battery life in mind.
 
 ## Todo
 
-- Allow user to whitelist camera apps from a list of all apps installed
 - Configuration options:
   - Vibration strength
   - Toggle notification
