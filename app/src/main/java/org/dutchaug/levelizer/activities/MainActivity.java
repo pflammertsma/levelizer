@@ -4,12 +4,16 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +54,21 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.bt_service)
     protected Button mBtService;
 
+    @BindView(R.id.cv_overlay)
+    protected CardView mCvOverlay;
+
+    @BindView(R.id.tv_overlay)
+    protected TextView mTvOverlay;
+
+    @BindView(R.id.bt_overlay)
+    protected Button mBtOverlay;
+
+    @BindView(R.id.sw_overlay_arrows)
+    protected SwitchCompat mSwOverlayArrows;
+
+    @BindView(R.id.sw_overlay_toggle)
+    protected SwitchCompat mSwOverlayToggle;
+
     @BindView(R.id.tv_toggle)
     protected TextView mTvToggle;
 
@@ -63,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            checkAccessibilityStatus();
+            updateStatus();
         }
     };
 
@@ -88,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @Override
     protected void onStart() {
         super.onStart();
-        checkAccessibilityStatus();
+        updateStatus();
         mHandler.postDelayed(mRunnable, 1000);
     }
 
@@ -121,18 +140,23 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateStatus() {
+        checkAccessibilityStatus();
+        checkOverlayStatus();
+    }
+
     private void checkAccessibilityStatus() {
         AccessibilityManager accessibilityService = (AccessibilityManager)
                 getSystemService(Context.ACCESSIBILITY_SERVICE);
         if (accessibilityService != null) {
-            List<AccessibilityServiceInfo> infos =
+            List<AccessibilityServiceInfo> services =
                     accessibilityService.getEnabledAccessibilityServiceList(
                             AccessibilityServiceInfo.FEEDBACK_HAPTIC);
 
             boolean enabled = false;
-            if (infos != null) {
-                for (AccessibilityServiceInfo info : infos) {
-                    if (info.getId().contains(CameraDetectionService.class.getSimpleName())) {
+            if (services != null) {
+                for (AccessibilityServiceInfo service : services) {
+                    if (service.getId().contains(CameraDetectionService.class.getSimpleName())) {
                         enabled = true;
                         break;
                     }
@@ -147,8 +171,6 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     private void onAccessibilityStatus(boolean serviceEnabled) {
         Log.d(TAG, "accessibility service " + (serviceEnabled ? "enabled" : "disabled"));
-        mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable_service);
-        mBtService.setEnabled(!serviceEnabled);
         if (serviceEnabled) {
             Animation animation = mCvService.getAnimation();
             if (animation != null) {
@@ -190,6 +212,25 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         }
     }
 
+    private void checkOverlayStatus() {
+        onOverlayStatus(Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)));
+    }
+
+    private void onOverlayStatus(boolean canDrawOverlays) {
+        if (canDrawOverlays) {
+            mTvOverlay.setVisibility(View.GONE);
+            mBtOverlay.setVisibility(View.GONE);
+            mSwOverlayArrows.setVisibility(View.VISIBLE);
+            mSwOverlayToggle.setVisibility(View.VISIBLE);
+        } else {
+            mTvOverlay.setVisibility(View.VISIBLE);
+            mBtOverlay.setVisibility(View.VISIBLE);
+            mSwOverlayArrows.setVisibility(View.GONE);
+            mSwOverlayToggle.setVisibility(View.GONE);
+        }
+    }
+
     @OnClick(R.id.bt_service)
     protected void onClickService() {
         FragmentManager fm = getSupportFragmentManager();
@@ -197,12 +238,20 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         dialog.show(fm, InstructionsFragment.TAG);
     }
 
+    @OnClick(R.id.bt_overlay)
+    protected void onClickOverlay() {
+        Intent settingsIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                           Uri.parse("package:" + getPackageName()));
+        settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(settingsIntent);
+    }
+
     @OnClick(R.id.bt_toggle)
     protected void onClickToggle() {
         boolean enabled = !Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
         Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, enabled);
         CameraDetectionService.notifyStateChange(this);
-        checkAccessibilityStatus();
+        updateStatus();
     }
 
     @OnClick(R.id.bt_whitelist)

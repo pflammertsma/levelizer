@@ -5,16 +5,25 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.dutchaug.levelizer.BuildConfig;
@@ -39,6 +48,9 @@ public class LevelizerService extends Service {
     private boolean mIsVibrating = false;
 
     private Vibrator mVibrator;
+    private WindowManager mWindowManager;
+
+    private ViewGroup mOverlayView;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
 
@@ -130,6 +142,28 @@ public class LevelizerService extends Service {
                 // TODO show an error??
             }
         }
+
+        mOverlayView = new FrameLayout(this);
+        TextView textView = new TextView(this);
+        textView.setText("Hello world");
+        textView.setTextColor(Color.WHITE);
+        mOverlayView.addView(textView);
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT);
+        params.gravity = Gravity.TOP | Gravity.LEFT;
+        params.x = 0;
+        params.y = 100;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this))) {
+            mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            mWindowManager.addView(mOverlayView, params);
+        }
     }
 
     @Override
@@ -147,6 +181,9 @@ public class LevelizerService extends Service {
             sensorManager.unregisterListener(mSensorEventListener);
         }
 
+        if (mWindowManager != null) {
+            mWindowManager.removeView(mOverlayView);
+        }
         if (mVibrator != null) {
             mVibrator.cancel();
         }

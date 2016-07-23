@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:fillViewport="true"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fillViewport="true"
         android:orientation="vertical">
 
         <include layout="@layout/in_introduction"/>
@@ -42,7 +42,7 @@
                     android:drawableLeft="@drawable/ic_error_compat"
                     android:drawablePadding="8dp"
                     android:drawableStart="@drawable/ic_error_compat"
-                    android:text="@string/onboarding_accessibility"
+                    android:text="@string/accessibility_description"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
 
                 <android.support.v7.widget.AppCompatButton
@@ -50,7 +50,7 @@
                     style="@style/Button.Borderless"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/enable_service"/>
+                    android:text="@string/accessibility_enable"/>
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/tv_toggle"
@@ -74,10 +74,58 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/cv_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/tv_overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/overlay_description"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/bt_overlay"
+                    style="@style/Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/overlay_enable"/>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/sw_overlay_arrows"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/overlay_arrows"
+                    android:visibility="gone"/>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/sw_overlay_toggle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/overlay_toggle"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:id="@+id/cv_whitelist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:cardCornerRadius="8dp">
 
             <LinearLayout

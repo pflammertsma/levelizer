@@ -10,12 +10,13 @@
     <string name="about_action">About</string>
     <string name="about_description">Levelizer aides you in taking level photos through haptic feedback. When using your favorite camera app, Levelizer will gently buzz until you\'re holding your phone straight.</string>
 
-    <string name="onboarding_title">Onboarding</string>
-    <string name="onboarding_all_done">All done!</string>
-    <string name="onboarding_accessibility">Levelizer needs accessibility permissions in order to work. Please enable it.</string>
+    <string name="accessibility_description">Levelizer needs accessibility permissions in order to work. Please enable it.</string>
+    <string name="accessibility_enable">Enable accessibility service</string>
 
-    <string name="enable_service">Enable accessibility service</string>
-    <string name="status">Status: %1$s</string>
+    <string name="overlay_description">In order to enable a screen overlay to toggle Levelizer from your camera, it needs permission to draw over other apps.</string>
+    <string name="overlay_enable">Enable overlay</string>
+    <string name="overlay_arrows">Display an orientation arrows on top of your camera app</string>
+    <string name="overlay_toggle">Provide a button on top of your camera app to disable Levelizer</string>
 
     <string name="status_enabled">Levelizer is currently enabled.</string>
     <string name="status_disabled">Levelizer is currently disabled.</string>
@@ -29,10 +30,10 @@
     <string name="instructions_success">You\'re done! Levelizer will now give haptic feedback for camera apps on your whitelist.</string>
     <string name="instructions_great">Great!</string>
 
-    <string name="onboarding_whitelist">Is Levelizer not detecting your camera app? Add it to the whitelist.</string>
-    <string name="whitelist_explanation">Add camera apps to the whitelist to make sure Levelizer works with them.</string>
-    <string name="camera_whitelist">Camera whitelist</string>
-    <string name="whitelist_is_empty">Whitelist is empty</string>
+    <string name="onboarding_whitelist">Add apps to the list of known camera apps.</string>
+    <string name="whitelist_explanation">Add camera apps to this list to make sure Levelizer provides feedback while they\'re running.</string>
+    <string name="camera_whitelist">Camera list</string>
+    <string name="whitelist_is_empty">Camera list is empty</string>
     <string name="not_installed">This app is not installed</string>
     <string name="no_apps_found">No apps found.</string>
     <string name="app_list">App list</string>

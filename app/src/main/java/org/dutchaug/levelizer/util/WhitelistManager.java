@@ -35,6 +35,7 @@ public class WhitelistManager {
             "com.magix.camera_mx",
             "com.flavionet.android.camera.pro",
             "net.sourceforge.opencamera",
+            "com.camtechstudio.lumiocam",
             };
 
     private static Set<String> sWhitelist;
