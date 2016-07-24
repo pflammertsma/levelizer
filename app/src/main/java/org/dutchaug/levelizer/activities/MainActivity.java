@@ -194,26 +194,34 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             List<AccessibilityServiceInfo> infos =
                     accessibilityService.getEnabledAccessibilityServiceList(
                             AccessibilityServiceInfo.FEEDBACK_HAPTIC);
-            String serviceName = getPackageName() + "/" + CameraDetectionService.class.getName();
-
+            String packageName = getPackageName() + "/";
+            String serviceName = CameraDetectionService.class.getName();
+            if (serviceName.startsWith(packageName)) {
+                // Shorthand version
+                serviceName = serviceName.substring(packageName.length());
+            }
             boolean enabled = false;
             if (infos != null) {
                 for (AccessibilityServiceInfo info : infos) {
-                    if (info.getId().equals(serviceName)) {
+                    String infoId = info.getId();
+                    if (infoId.startsWith(packageName) && infoId.endsWith(infoId)) {
+                        Log.d(TAG, "accessibility service found: " + infoId);
                         enabled = true;
                         break;
                     }
                 }
             }
-
+            if (!enabled) {
+                Log.w(TAG, "accessibility service not found: " + packageName + serviceName);
+            }
             onAccessibilityStatus(enabled);
         } else {
+            Log.d(TAG, "accessibility service not available");
             onAccessibilityStatus(false);
         }
     }
 
     private void onAccessibilityStatus(boolean serviceEnabled) {
-        Log.d(TAG, "accessibility service " + (serviceEnabled ? "enabled" : "disabled"));
         mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable_service);
         mBtService.setEnabled(!serviceEnabled);
         if (serviceEnabled) {
