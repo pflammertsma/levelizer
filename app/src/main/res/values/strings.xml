@@ -17,10 +17,7 @@
     <string name="enable_service">Enable accessibility service</string>
     <string name="status">Status: %1$s</string>
 
-    <string name="status_enabled">Levelizer is currently enabled.</string>
-    <string name="status_disabled">Levelizer is currently disabled.</string>
-    <string name="disable">Disable</string>
-    <string name="enable">Enable</string>
+    <string name="enable">Enable Levelizer</string>
 
     <string name="instruction1">In the following screen, locate Levelizer under accessibility services and tap on it.</string>
     <string name="instruction2">Flip the switch to the on position and you\'re done!</string>

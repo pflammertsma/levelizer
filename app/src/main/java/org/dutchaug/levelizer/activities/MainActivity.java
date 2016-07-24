@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,11 +51,8 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.bt_service)
     protected Button mBtService;
 
-    @BindView(R.id.tv_toggle)
-    protected TextView mTvToggle;
-
-    @BindView(R.id.bt_toggle)
-    protected Button mBtToggle;
+    @BindView(R.id.sw_toggle)
+    protected SwitchCompat mSwToggle;
 
     private boolean mShowSuccess = false;
     private boolean mShowError = true;
@@ -167,15 +165,8 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             mTvService.setVisibility(View.GONE);
             mBtService.setVisibility(View.GONE);
-            if (Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true)) {
-                mTvToggle.setText(R.string.status_enabled);
-                mBtToggle.setText(R.string.disable);
-            } else {
-                mTvToggle.setText(R.string.status_disabled);
-                mBtToggle.setText(R.string.enable);
-            }
-            mTvToggle.setVisibility(View.VISIBLE);
-            mBtToggle.setVisibility(View.VISIBLE);
+            mSwToggle.setChecked(Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true));
+            mSwToggle.setVisibility(View.VISIBLE);
         } else {
             if (mShowError) {
                 mShowError = false;
@@ -185,8 +176,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             mTvService.setVisibility(View.VISIBLE);
             mBtService.setVisibility(View.VISIBLE);
-            mTvToggle.setVisibility(View.GONE);
-            mBtToggle.setVisibility(View.GONE);
+            mSwToggle.setVisibility(View.GONE);
         }
     }
 
@@ -197,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         dialog.show(fm, InstructionsFragment.TAG);
     }
 
-    @OnClick(R.id.bt_toggle)
+    @OnClick(R.id.sw_toggle)
     protected void onClickToggle() {
         boolean enabled = !Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
         Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, enabled);
