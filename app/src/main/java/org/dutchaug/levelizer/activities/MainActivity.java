@@ -21,9 +21,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.github.channguyen.rsv.RangeSliderView;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.fragments.InstructionsFragment;
 import org.dutchaug.levelizer.services.CameraDetectionService;
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     protected TextView mTvVibration;
 
     @BindView(R.id.rsv_vibration)
-    protected RangeSliderView mRsvVibration;
+    protected DiscreteSeekBar mDsbVibration;
 
     private boolean mShowSuccess = false;
     private boolean mShowError = true;
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     };
 
     private VibrationWrapper mVibrationWrapper;
+    private boolean mVibrationFeedback;
 
 
     @Override
@@ -95,9 +96,10 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         // For sampling vibrations
         mVibrationWrapper = new VibrationWrapper(this);
 
-        mRsvVibration.setOnSlideListener(new RangeSliderView.OnSlideListener() {
+        mDsbVibration.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+
             @Override
-            public void onSlide(int value) {
+            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
                 int vibrationStrength;
                 switch (value) {
                     default:
@@ -117,10 +119,22 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
                 }
                 mTvVibration.setText(getString(R.string.vibration_value, getString(vibrationStrength)));
                 mVibrationWrapper.setVibrationStrength(value);
-                mVibrationWrapper.sample();
+                if (mVibrationFeedback) {
+                    mVibrationWrapper.sample();
+                }
             }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
         });
-        mRsvVibration.setInitialIndex(Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1));
+        mDsbVibration.setProgress(Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1));
+        mVibrationFeedback = true;
     }
 
     @Override

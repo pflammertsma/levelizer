@@ -83,7 +83,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.2.0'
     apt 'com.jakewharton:butterknife-compiler:8.2.0'
 
-    compile 'com.github.channguyen:rsv:1.0.1'
+    compile 'org.adw.library:discrete-seekbar:1.0.1'
 
     compile 'com.pixplicity.easyprefs:library:1.8.1@aar'
 
