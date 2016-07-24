@@ -19,18 +19,10 @@ public class VibrationWrapper {
     public VibrationWrapper(Context context) {
         mContext = context;
         mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        setVibrationStrength(-1);
+        setVibrationStrength(Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1));
     }
 
     public void setVibrationStrength(int value) {
-        int oldValue = Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1);
-        if (value < 0) {
-            value = oldValue;
-        }
-        if (oldValue != value) {
-            Prefs.putInt(CameraDetectionService.PREF_VIBRATION, value);
-            CameraDetectionService.notifyStateChange(mContext);
-        }
         switch (value) {
             default:
             case 0:

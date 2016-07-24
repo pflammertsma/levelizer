@@ -66,6 +66,15 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.dsb_vibration)
     protected DiscreteSeekBar mDsbVibration;
 
+    @BindView(R.id.vg_tolerance)
+    protected ViewGroup mVgTolerance;
+
+    @BindView(R.id.tv_tolerance)
+    protected TextView mTvTolerance;
+
+    @BindView(R.id.dsb_tolerance)
+    protected DiscreteSeekBar mDsbTolerance;
+
     private boolean mShowSuccess = false;
     private boolean mShowError = true;
 
@@ -78,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     };
 
     private VibrationWrapper mVibrationWrapper;
-    private boolean mVibrationFeedback;
 
 
     @Override
@@ -100,32 +108,13 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         // For sampling vibrations
         mVibrationWrapper = new VibrationWrapper(this);
 
+        int vibrationStrength = Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1);
+        mDsbVibration.setProgress(vibrationStrength);
         mDsbVibration.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
 
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
-                int vibrationStrength;
-                switch (value) {
-                    default:
-                    case 0:
-                        vibrationStrength = R.string.vibration_0;
-                        value = 0;
-                        break;
-                    case 1:
-                        vibrationStrength = R.string.vibration_1;
-                        break;
-                    case 2:
-                        vibrationStrength = R.string.vibration_2;
-                        break;
-                    case 3:
-                        vibrationStrength = R.string.vibration_3;
-                        break;
-                }
-                mTvVibration.setText(getString(R.string.vibration_value, getString(vibrationStrength)));
-                mVibrationWrapper.setVibrationStrength(value);
-                if (mVibrationFeedback) {
-                    mVibrationWrapper.sample();
-                }
+                onChangeVibration(value, true);
             }
 
             @Override
@@ -137,8 +126,27 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
 
         });
-        mDsbVibration.setProgress(Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1));
-        mVibrationFeedback = true;
+        onChangeVibration(vibrationStrength, false);
+
+        int tolerance = Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3);
+        mDsbTolerance.setProgress(tolerance);
+        mDsbTolerance.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+
+            @Override
+            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+                onChangeTolerance(value, true);
+            }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
+        });
+        onChangeTolerance(tolerance, false);
     }
 
     @Override
@@ -224,9 +232,18 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             mTvService.setVisibility(View.GONE);
             mBtService.setVisibility(View.GONE);
-            mSwToggle.setChecked(Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true));
+            boolean enabled = Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
+            float alpha = enabled ? 1f : 0.4f;
+            mSwToggle.setChecked(enabled);
+            mTvVibration.setAlpha(alpha);
+            mDsbVibration.setEnabled(enabled);
+            mDsbVibration.setAlpha(alpha);
+            mTvTolerance.setAlpha(alpha);
+            mDsbTolerance.setEnabled(enabled);
+            mDsbTolerance.setAlpha(alpha);
             mSwToggle.setVisibility(View.VISIBLE);
             mVgVibration.setVisibility(View.VISIBLE);
+            mVgTolerance.setVisibility(View.VISIBLE);
         } else {
             if (mShowError) {
                 mShowError = false;
@@ -238,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             mBtService.setVisibility(View.VISIBLE);
             mSwToggle.setVisibility(View.GONE);
             mVgVibration.setVisibility(View.GONE);
+            mVgTolerance.setVisibility(View.GONE);
         }
     }
 
@@ -254,6 +272,51 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, enabled);
         CameraDetectionService.notifyStateChange(this);
         checkAccessibilityStatus();
+    }
+
+    private void onChangeVibration(int value, boolean fromUi) {
+        int vibrationStrength;
+        switch (value) {
+            default:
+            case 0:
+                vibrationStrength = R.string.vibration_0;
+                value = 0;
+                break;
+            case 1:
+                vibrationStrength = R.string.vibration_1;
+                break;
+            case 2:
+                vibrationStrength = R.string.vibration_2;
+                break;
+            case 3:
+                vibrationStrength = R.string.vibration_3;
+                break;
+        }
+        mTvVibration.setText(getString(R.string.vibration_value, getString(vibrationStrength)));
+        int oldValue = Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1);
+        if (oldValue != value) {
+            Prefs.putInt(CameraDetectionService.PREF_VIBRATION, value);
+            CameraDetectionService.notifyStateChange(MainActivity.this);
+        }
+        mVibrationWrapper.setVibrationStrength(value);
+        if (fromUi) {
+            mVibrationWrapper.sample();
+        }
+    }
+
+    private void onChangeTolerance(int value, boolean fromUi) {
+        if (value < 1) {
+            value = 1;
+        }
+        if (value > 10) {
+            value = 10;
+        }
+        mTvTolerance.setText(getString(R.string.tolerance_value, value));
+        int oldValue = Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3);
+        if (oldValue != value) {
+            Prefs.putInt(CameraDetectionService.PREF_TOLERANCE, value);
+            CameraDetectionService.notifyStateChange(MainActivity.this);
+        }
     }
 
     @OnClick(R.id.bt_whitelist)

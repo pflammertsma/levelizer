@@ -10,12 +10,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.pixplicity.easyprefs.library.Prefs;
 
 import org.dutchaug.levelizer.BuildConfig;
 import org.dutchaug.levelizer.R;
@@ -28,10 +29,12 @@ public class LevelizerService extends Service {
     private static final int REQUEST_CODE = 1000;
     private static final int NOTIFICATION_ID = 1;
 
-    private static final double LEVEL_THRESHOLD = 0.6;
+    private static final float DEGREES_RATIO = 0.2f;
     private static final int GRAVITY_THRESHOLD = 2;
 
     private static final String EXTRA_STOP = "stop";
+
+    private float mTolerance;
 
     private VibrationWrapper mVibrationWrapper;
 
@@ -53,7 +56,7 @@ public class LevelizerService extends Service {
                 // This suggests axis with index 0 is pointing down
                 amountOffLevel = Math.abs(sensorEvent.values[1]);
             }
-            boolean leveled = amountOffLevel < LEVEL_THRESHOLD;
+            boolean leveled = amountOffLevel < mTolerance;
             if (!leveled) {
                 mVibrationWrapper.start();
             } else {
@@ -102,6 +105,8 @@ public class LevelizerService extends Service {
 
         // Start this service in the foreground on the notification
         startForeground(NOTIFICATION_ID, notification);
+
+        mTolerance = Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3) * DEGREES_RATIO;
 
         mVibrationWrapper = new VibrationWrapper(this);
 
