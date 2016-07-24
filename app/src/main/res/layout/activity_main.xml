@@ -86,7 +86,7 @@
                     <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
                         android:id="@+id/dsb_vibration"
                         style="@style/DiscreteSeekBar"
-                        android:layout_width="128dp"
+                        android:layout_width="144dp"
                         android:layout_height="wrap_content"
                         app:dsb_max="3"
                         app:dsb_min="0"
@@ -117,7 +117,7 @@
                     <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
                         android:id="@+id/dsb_tolerance"
                         style="@style/DiscreteSeekBar"
-                        android:layout_width="128dp"
+                        android:layout_width="144dp"
                         android:layout_height="wrap_content"
                         app:dsb_max="10"
                         app:dsb_min="1"
