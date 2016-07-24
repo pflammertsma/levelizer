@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -56,10 +57,13 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.sw_toggle)
     protected SwitchCompat mSwToggle;
 
+    @BindView(R.id.vg_vibration)
+    protected ViewGroup mVgVibration;
+
     @BindView(R.id.tv_vibration)
     protected TextView mTvVibration;
 
-    @BindView(R.id.rsv_vibration)
+    @BindView(R.id.dsb_vibration)
     protected DiscreteSeekBar mDsbVibration;
 
     private boolean mShowSuccess = false;
@@ -222,6 +226,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             mBtService.setVisibility(View.GONE);
             mSwToggle.setChecked(Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true));
             mSwToggle.setVisibility(View.VISIBLE);
+            mVgVibration.setVisibility(View.VISIBLE);
         } else {
             if (mShowError) {
                 mShowError = false;
@@ -232,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             mTvService.setVisibility(View.VISIBLE);
             mBtService.setVisibility(View.VISIBLE);
             mSwToggle.setVisibility(View.GONE);
+            mVgVibration.setVisibility(View.GONE);
         }
     }
 
