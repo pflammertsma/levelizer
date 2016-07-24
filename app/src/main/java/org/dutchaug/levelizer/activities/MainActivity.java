@@ -22,6 +22,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.answers.CustomEvent;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
@@ -93,9 +96,10 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        Answers.getInstance().logContentView(new ContentViewEvent().putContentName("main"));
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -231,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             if (mShowSuccess) {
                 mShowSuccess = false;
+                Answers.getInstance().logCustom(new CustomEvent("accessibility success"));
                 new AlertDialog.Builder(this, R.style.DialogStyle)
                         .setView(R.layout.fragment_success)
                         .setPositiveButton(R.string.instructions_great, new DialogInterface.OnClickListener() {
@@ -271,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     @OnClick(R.id.bt_service)
     protected void onClickService() {
+        Answers.getInstance().logCustom(new CustomEvent("accessibility dialog"));
         FragmentManager fm = getSupportFragmentManager();
         InstructionsFragment dialog = InstructionsFragment.create();
         dialog.show(fm, InstructionsFragment.TAG);
@@ -279,6 +285,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @OnClick(R.id.sw_toggle)
     protected void onClickToggle() {
         boolean enabled = !Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
+        Answers.getInstance().logCustom(new CustomEvent(enabled ? "enable" : "disable"));
         Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, enabled);
         CameraDetectionService.notifyStateChange(this);
         checkAccessibilityStatus();
@@ -336,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     @Override
     public void onEnterAccessibility() {
+        Answers.getInstance().logCustom(new CustomEvent("accessibility launch"));
         mShowError = true;
         mShowSuccess = true;
         Prefs.putBoolean(CameraDetectionService.PREF_FIRST_RESPONSE, true);

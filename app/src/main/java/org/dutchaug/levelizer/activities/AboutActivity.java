@@ -10,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.answers.CustomEvent;
+
 import org.dutchaug.levelizer.R;
 
 import butterknife.BindView;
@@ -26,6 +30,8 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
+
+        Answers.getInstance().logContentView(new ContentViewEvent().putContentName("about"));
 
         setTitle(R.string.about_title);
 

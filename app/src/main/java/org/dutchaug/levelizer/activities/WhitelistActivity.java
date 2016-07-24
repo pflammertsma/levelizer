@@ -14,6 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.adapters.AppsListAdapter;
 import org.dutchaug.levelizer.fragments.AddAppDialogFragment;
@@ -47,6 +50,8 @@ public class WhitelistActivity extends AppCompatActivity implements DialogInterf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_whitelist);
         ButterKnife.bind(this);
+
+        Answers.getInstance().logContentView(new ContentViewEvent().putContentName("whitelist"));
 
         setTitle(R.string.camera_whitelist);
 
