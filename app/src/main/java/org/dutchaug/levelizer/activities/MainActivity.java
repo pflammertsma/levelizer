@@ -75,13 +75,14 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.dsb_tolerance)
     protected DiscreteSeekBar mDsbTolerance;
 
-    private boolean mShowSuccess = false;
-    private boolean mShowError = true;
+    private boolean mShowSuccess;
+    private boolean mShowError;
 
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
+            mShowError = true;
             checkAccessibilityStatus();
         }
     };
@@ -153,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     protected void onStart() {
         super.onStart();
         checkAccessibilityStatus();
-        mHandler.postDelayed(mRunnable, 1000);
+        mHandler.postDelayed(mRunnable, 500);
     }
 
     @Override
@@ -193,11 +194,12 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             List<AccessibilityServiceInfo> infos =
                     accessibilityService.getEnabledAccessibilityServiceList(
                             AccessibilityServiceInfo.FEEDBACK_HAPTIC);
+            String serviceName = getPackageName() + "/" + CameraDetectionService.class.getName();
 
             boolean enabled = false;
             if (infos != null) {
                 for (AccessibilityServiceInfo info : infos) {
-                    if (info.getId().contains(CameraDetectionService.class.getSimpleName())) {
+                    if (info.getId().equals(serviceName)) {
                         enabled = true;
                         break;
                     }
