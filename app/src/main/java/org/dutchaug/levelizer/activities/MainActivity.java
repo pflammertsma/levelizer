@@ -21,11 +21,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.github.channguyen.rsv.RangeSliderView;
 import com.pixplicity.easyprefs.library.Prefs;
 
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.fragments.InstructionsFragment;
 import org.dutchaug.levelizer.services.CameraDetectionService;
+import org.dutchaug.levelizer.util.VibrationWrapper;
 
 import java.util.List;
 
@@ -54,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.sw_toggle)
     protected SwitchCompat mSwToggle;
 
+    @BindView(R.id.tv_vibration)
+    protected TextView mTvVibration;
+
+    @BindView(R.id.rsv_vibration)
+    protected RangeSliderView mRsvVibration;
+
     private boolean mShowSuccess = false;
     private boolean mShowError = true;
 
@@ -65,10 +73,15 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         }
     };
 
+    private VibrationWrapper mVibrationWrapper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -79,8 +92,35 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             mShowError = savedInstanceState.getBoolean(KEY_SHOW_ERROR, true);
         }
 
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        // For sampling vibrations
+        mVibrationWrapper = new VibrationWrapper(this);
+
+        mRsvVibration.setOnSlideListener(new RangeSliderView.OnSlideListener() {
+            @Override
+            public void onSlide(int value) {
+                int vibrationStrength;
+                switch (value) {
+                    default:
+                    case 0:
+                        vibrationStrength = R.string.vibration_0;
+                        value = 0;
+                        break;
+                    case 1:
+                        vibrationStrength = R.string.vibration_1;
+                        break;
+                    case 2:
+                        vibrationStrength = R.string.vibration_2;
+                        break;
+                    case 3:
+                        vibrationStrength = R.string.vibration_3;
+                        break;
+                }
+                mTvVibration.setText(getString(R.string.vibration_value, getString(vibrationStrength)));
+                mVibrationWrapper.setVibrationStrength(value);
+                mVibrationWrapper.sample();
+            }
+        });
+        mRsvVibration.setInitialIndex(Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1));
     }
 
     @Override
@@ -99,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     @Override
     protected void onStop() {
+        mVibrationWrapper.stop();
         mHandler.removeCallbacks(mRunnable);
         super.onStop();
     }

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import org.dutchaug.levelizer.BuildConfig;
 import org.dutchaug.levelizer.R;
+import org.dutchaug.levelizer.util.VibrationWrapper;
 
 public class LevelizerService extends Service {
 
@@ -30,15 +31,9 @@ public class LevelizerService extends Service {
     private static final double LEVEL_THRESHOLD = 0.6;
     private static final int GRAVITY_THRESHOLD = 2;
 
-    private static final int FREQUENCY_LOW = 100;
-    private static final int FREQUENCY_MID = 300;
-    private static final int FREQUENCY_HIGH = 1000;
-
     private static final String EXTRA_STOP = "stop";
 
-    private boolean mIsVibrating = false;
-
-    private Vibrator mVibrator;
+    private VibrationWrapper mVibrationWrapper;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
 
@@ -60,20 +55,9 @@ public class LevelizerService extends Service {
             }
             boolean leveled = amountOffLevel < LEVEL_THRESHOLD;
             if (!leveled) {
-                /* TODO we need to change the vibration frequency dynamically, but this isn't so easy :)
-                if (mIsVibrating) {
-                    mVibrator.cancel();
-                }
-                int vibrationPause = (int) Math.max(20, (FREQUENCY_HIGH * Math.min(1f, amountOffLevel / 3f)));
-                */
-                if (!mIsVibrating) {
-                    int vibrationPause = FREQUENCY_MID;
-                    mIsVibrating = true;
-                    mVibrator.vibrate(new long[]{0, 20, vibrationPause}, 0);
-                }
+                mVibrationWrapper.start();
             } else {
-                mIsVibrating = false;
-                mVibrator.cancel();
+                mVibrationWrapper.stop();
             }
         }
 
@@ -119,7 +103,8 @@ public class LevelizerService extends Service {
         // Start this service in the foreground on the notification
         startForeground(NOTIFICATION_ID, notification);
 
-        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mVibrationWrapper = new VibrationWrapper(this);
+
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -147,9 +132,7 @@ public class LevelizerService extends Service {
             sensorManager.unregisterListener(mSensorEventListener);
         }
 
-        if (mVibrator != null) {
-            mVibrator.cancel();
-        }
+        mVibrationWrapper.stop();
 
         super.onDestroy();
     }

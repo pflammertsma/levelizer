@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Levelizer</string>
 
     <string name="notification_text">Levelizer is running; tap to stop</string>
@@ -18,6 +18,12 @@
     <string name="status">Status: %1$s</string>
 
     <string name="enable">Enable Levelizer</string>
+
+    <string name="vibration_value">Haptic feedback (<xliff:g example="low" id="feedback_strength">%1$s</xliff:g>)</string>
+    <string name="vibration_0">none</string>
+    <string name="vibration_1">low</string>
+    <string name="vibration_2">medium</string>
+    <string name="vibration_3">high</string>
 
     <string name="instruction1">In the following screen, locate Levelizer under accessibility services and tap on it.</string>
     <string name="instruction2">Flip the switch to the on position and you\'re done!</string>

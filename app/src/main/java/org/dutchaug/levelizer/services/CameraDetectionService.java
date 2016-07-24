@@ -21,6 +21,7 @@ public class CameraDetectionService extends AccessibilityService {
 
     public static final String PREF_ENABLED = "enabled";
     public static final String PREF_FIRST_RESPONSE = "first_response";
+    public static final String PREF_VIBRATION = "vibration";
 
     private static final String TAG = CameraDetectionService.class.getSimpleName();
 
