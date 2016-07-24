@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:text="@string/contributors"
+            android:text="@string/about_contributors"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <LinearLayout
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="20dp"
-            android:text="Libraries"
+            android:text="@string/about_libraries"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <LinearLayout
@@ -190,7 +190,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="20dp"
-            android:text="Source"
+            android:text="@string/about_source"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
         <TextView
@@ -201,6 +201,24 @@
             android:text="https://github.com/pflammertsma/levelizer"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
             android:textColorLink="@color/colorPrimary"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/about_version"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
+        <TextView
+            android:id="@+id/tv_version"
+            style="@style/Row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+            android:textColorLink="@color/colorPrimary"
+            tools:text="Version 1.0"/>
 
     </LinearLayout>
 

@@ -1,18 +1,29 @@
 package org.dutchaug.levelizer.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.answers.CustomEvent;
 
 import org.dutchaug.levelizer.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AboutActivity extends AppCompatActivity {
+
+    @BindView(R.id.tv_version)
+    protected TextView mTvVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +31,16 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
 
+        Answers.getInstance().logContentView(new ContentViewEvent().putContentName("about"));
+
         setTitle(R.string.about_title);
+
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            mTvVersion.setText(getString(R.string.version, packageInfo.versionName, packageInfo.versionCode));
+        } catch (PackageManager.NameNotFoundException e) {
+            mTvVersion.setText("—");
+        }
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

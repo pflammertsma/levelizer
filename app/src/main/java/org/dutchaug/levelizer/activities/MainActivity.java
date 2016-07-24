@@ -10,21 +10,28 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
+import com.crashlytics.android.answers.CustomEvent;
 import com.pixplicity.easyprefs.library.Prefs;
 
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.fragments.InstructionsFragment;
 import org.dutchaug.levelizer.services.CameraDetectionService;
+import org.dutchaug.levelizer.util.VibrationWrapper;
 
 import java.util.List;
 
@@ -50,27 +57,49 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     @BindView(R.id.bt_service)
     protected Button mBtService;
 
-    @BindView(R.id.tv_toggle)
-    protected TextView mTvToggle;
+    @BindView(R.id.sw_toggle)
+    protected SwitchCompat mSwToggle;
 
-    @BindView(R.id.bt_toggle)
-    protected Button mBtToggle;
+    @BindView(R.id.vg_vibration)
+    protected ViewGroup mVgVibration;
 
-    private boolean mShowSuccess = false;
-    private boolean mShowError = true;
+    @BindView(R.id.tv_vibration)
+    protected TextView mTvVibration;
+
+    @BindView(R.id.dsb_vibration)
+    protected DiscreteSeekBar mDsbVibration;
+
+    @BindView(R.id.vg_tolerance)
+    protected ViewGroup mVgTolerance;
+
+    @BindView(R.id.tv_tolerance)
+    protected TextView mTvTolerance;
+
+    @BindView(R.id.dsb_tolerance)
+    protected DiscreteSeekBar mDsbTolerance;
+
+    private boolean mShowSuccess;
+    private boolean mShowError;
 
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
+            mShowError = true;
             checkAccessibilityStatus();
         }
     };
+
+    private VibrationWrapper mVibrationWrapper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
+        Answers.getInstance().logContentView(new ContentViewEvent().putContentName("main"));
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -81,15 +110,55 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             mShowError = savedInstanceState.getBoolean(KEY_SHOW_ERROR, true);
         }
 
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        // For sampling vibrations
+        mVibrationWrapper = new VibrationWrapper(this);
+
+        int vibrationStrength = Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1);
+        mDsbVibration.setProgress(vibrationStrength);
+        mDsbVibration.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+
+            @Override
+            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+                onChangeVibration(value, true);
+            }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
+        });
+        onChangeVibration(vibrationStrength, false);
+
+        int tolerance = Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3);
+        mDsbTolerance.setProgress(tolerance);
+        mDsbTolerance.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+
+            @Override
+            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+                onChangeTolerance(value, true);
+            }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+            }
+
+        });
+        onChangeTolerance(tolerance, false);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         checkAccessibilityStatus();
-        mHandler.postDelayed(mRunnable, 1000);
+        mHandler.postDelayed(mRunnable, 500);
     }
 
     @Override
@@ -101,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     @Override
     protected void onStop() {
+        mVibrationWrapper.stop();
         mHandler.removeCallbacks(mRunnable);
         super.onStop();
     }
@@ -128,25 +198,34 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             List<AccessibilityServiceInfo> infos =
                     accessibilityService.getEnabledAccessibilityServiceList(
                             AccessibilityServiceInfo.FEEDBACK_HAPTIC);
-
+            String packageName = getPackageName() + "/";
+            String serviceName = CameraDetectionService.class.getName();
+            if (serviceName.startsWith(packageName)) {
+                // Shorthand version
+                serviceName = serviceName.substring(packageName.length());
+            }
             boolean enabled = false;
             if (infos != null) {
                 for (AccessibilityServiceInfo info : infos) {
-                    if (info.getId().contains(CameraDetectionService.class.getSimpleName())) {
+                    String infoId = info.getId();
+                    if (infoId.startsWith(packageName) && infoId.endsWith(infoId)) {
+                        Log.d(TAG, "accessibility service found: " + infoId);
                         enabled = true;
                         break;
                     }
                 }
             }
-
+            if (!enabled) {
+                Log.w(TAG, "accessibility service not found: " + packageName + serviceName);
+            }
             onAccessibilityStatus(enabled);
         } else {
+            Log.d(TAG, "accessibility service not available");
             onAccessibilityStatus(false);
         }
     }
 
     private void onAccessibilityStatus(boolean serviceEnabled) {
-        Log.d(TAG, "accessibility service " + (serviceEnabled ? "enabled" : "disabled"));
         mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable_service);
         mBtService.setEnabled(!serviceEnabled);
         if (serviceEnabled) {
@@ -156,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             if (mShowSuccess) {
                 mShowSuccess = false;
+                Answers.getInstance().logCustom(new CustomEvent("accessibility success"));
                 new AlertDialog.Builder(this, R.style.DialogStyle)
                         .setView(R.layout.fragment_success)
                         .setPositiveButton(R.string.instructions_great, new DialogInterface.OnClickListener() {
@@ -167,15 +247,18 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             mTvService.setVisibility(View.GONE);
             mBtService.setVisibility(View.GONE);
-            if (Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true)) {
-                mTvToggle.setText(R.string.status_enabled);
-                mBtToggle.setText(R.string.disable);
-            } else {
-                mTvToggle.setText(R.string.status_disabled);
-                mBtToggle.setText(R.string.enable);
-            }
-            mTvToggle.setVisibility(View.VISIBLE);
-            mBtToggle.setVisibility(View.VISIBLE);
+            boolean enabled = Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
+            float alpha = enabled ? 1f : 0.4f;
+            mSwToggle.setChecked(enabled);
+            mTvVibration.setAlpha(alpha);
+            mDsbVibration.setEnabled(enabled);
+            mDsbVibration.setAlpha(alpha);
+            mTvTolerance.setAlpha(alpha);
+            mDsbTolerance.setEnabled(enabled);
+            mDsbTolerance.setAlpha(alpha);
+            mSwToggle.setVisibility(View.VISIBLE);
+            mVgVibration.setVisibility(View.VISIBLE);
+            mVgTolerance.setVisibility(View.VISIBLE);
         } else {
             if (mShowError) {
                 mShowError = false;
@@ -185,24 +268,72 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             }
             mTvService.setVisibility(View.VISIBLE);
             mBtService.setVisibility(View.VISIBLE);
-            mTvToggle.setVisibility(View.GONE);
-            mBtToggle.setVisibility(View.GONE);
+            mSwToggle.setVisibility(View.GONE);
+            mVgVibration.setVisibility(View.GONE);
+            mVgTolerance.setVisibility(View.GONE);
         }
     }
 
     @OnClick(R.id.bt_service)
     protected void onClickService() {
+        Answers.getInstance().logCustom(new CustomEvent("accessibility dialog"));
         FragmentManager fm = getSupportFragmentManager();
         InstructionsFragment dialog = InstructionsFragment.create();
         dialog.show(fm, InstructionsFragment.TAG);
     }
 
-    @OnClick(R.id.bt_toggle)
+    @OnClick(R.id.sw_toggle)
     protected void onClickToggle() {
         boolean enabled = !Prefs.getBoolean(CameraDetectionService.PREF_ENABLED, true);
+        Answers.getInstance().logCustom(new CustomEvent(enabled ? "enable" : "disable"));
         Prefs.putBoolean(CameraDetectionService.PREF_ENABLED, enabled);
         CameraDetectionService.notifyStateChange(this);
         checkAccessibilityStatus();
+    }
+
+    private void onChangeVibration(int value, boolean fromUi) {
+        int vibrationStrength;
+        switch (value) {
+            default:
+            case 0:
+                vibrationStrength = R.string.vibration_0;
+                value = 0;
+                break;
+            case 1:
+                vibrationStrength = R.string.vibration_1;
+                break;
+            case 2:
+                vibrationStrength = R.string.vibration_2;
+                break;
+            case 3:
+                vibrationStrength = R.string.vibration_3;
+                break;
+        }
+        mTvVibration.setText(getString(R.string.vibration_value, getString(vibrationStrength)));
+        int oldValue = Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1);
+        if (oldValue != value) {
+            Prefs.putInt(CameraDetectionService.PREF_VIBRATION, value);
+            CameraDetectionService.notifyStateChange(MainActivity.this);
+        }
+        mVibrationWrapper.setVibrationStrength(value);
+        if (fromUi) {
+            mVibrationWrapper.sample();
+        }
+    }
+
+    private void onChangeTolerance(int value, boolean fromUi) {
+        if (value < 1) {
+            value = 1;
+        }
+        if (value > 10) {
+            value = 10;
+        }
+        mTvTolerance.setText(getString(R.string.tolerance_value, value));
+        int oldValue = Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3);
+        if (oldValue != value) {
+            Prefs.putInt(CameraDetectionService.PREF_TOLERANCE, value);
+            CameraDetectionService.notifyStateChange(MainActivity.this);
+        }
     }
 
     @OnClick(R.id.bt_whitelist)
@@ -212,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
 
     @Override
     public void onEnterAccessibility() {
+        Answers.getInstance().logCustom(new CustomEvent("accessibility launch"));
         mShowError = true;
         mShowSuccess = true;
         Prefs.putBoolean(CameraDetectionService.PREF_FIRST_RESPONSE, true);

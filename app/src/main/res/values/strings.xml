@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Levelizer</string>
 
     <string name="notification_text">Levelizer is running; tap to stop</string>
@@ -9,6 +9,11 @@
     <string name="about_title">About Levelizer</string>
     <string name="about_action">About</string>
     <string name="about_description">Levelizer aides you in taking level photos through haptic feedback. When using your favorite camera app, Levelizer will gently buzz until you\'re holding your phone straight.</string>
+    <string name="about_contributors">Contributors</string>
+    <string name="about_libraries">Libraries</string>
+    <string name="about_source">Source</string>
+    <string name="about_version">Version</string>
+    <string name="version">%1$s(r%2$d)</string>
 
     <string name="onboarding_title">Onboarding</string>
     <string name="onboarding_all_done">All done!</string>
@@ -17,10 +22,15 @@
     <string name="enable_service">Enable accessibility service</string>
     <string name="status">Status: %1$s</string>
 
-    <string name="status_enabled">Levelizer is currently enabled.</string>
-    <string name="status_disabled">Levelizer is currently disabled.</string>
-    <string name="disable">Disable</string>
-    <string name="enable">Enable</string>
+    <string name="enable">Enable Levelizer</string>
+
+    <string name="vibration_value">Haptic feedback: <xliff:g example="low" id="feedback_strength">%1$s</xliff:g></string>
+    <string name="vibration_0">none</string>
+    <string name="vibration_1">low</string>
+    <string name="vibration_2">medium</string>
+    <string name="vibration_3">high</string>
+
+    <string name="tolerance_value">Tolerance: <xliff:g example="3" id="degrees">%1$d</xliff:g>°</string>
 
     <string name="instruction1">In the following screen, locate Levelizer under accessibility services and tap on it.</string>
     <string name="instruction2">Flip the switch to the on position and you\'re done!</string>
@@ -36,7 +46,6 @@
     <string name="not_installed">This app is not installed</string>
     <string name="no_apps_found">No apps found.</string>
     <string name="app_list">App list</string>
-    <string name="contributors">Contributors</string>
 
     <string name="add_app_explanation">Select one of the following apps that uses the camera permission:</string>
     <string name="install">Install app</string>

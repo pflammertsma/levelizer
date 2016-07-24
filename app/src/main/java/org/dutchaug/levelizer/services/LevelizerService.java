@@ -10,15 +10,17 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.pixplicity.easyprefs.library.Prefs;
+
 import org.dutchaug.levelizer.BuildConfig;
 import org.dutchaug.levelizer.R;
+import org.dutchaug.levelizer.util.VibrationWrapper;
 
 public class LevelizerService extends Service {
 
@@ -27,18 +29,14 @@ public class LevelizerService extends Service {
     private static final int REQUEST_CODE = 1000;
     private static final int NOTIFICATION_ID = 1;
 
-    private static final double LEVEL_THRESHOLD = 0.6;
+    private static final float DEGREES_RATIO = 0.2f;
     private static final int GRAVITY_THRESHOLD = 2;
-
-    private static final int FREQUENCY_LOW = 100;
-    private static final int FREQUENCY_MID = 300;
-    private static final int FREQUENCY_HIGH = 1000;
 
     private static final String EXTRA_STOP = "stop";
 
-    private boolean mIsVibrating = false;
+    private float mTolerance;
 
-    private Vibrator mVibrator;
+    private VibrationWrapper mVibrationWrapper;
 
     private SensorEventListener mSensorEventListener = new SensorEventListener() {
 
@@ -58,22 +56,11 @@ public class LevelizerService extends Service {
                 // This suggests axis with index 0 is pointing down
                 amountOffLevel = Math.abs(sensorEvent.values[1]);
             }
-            boolean leveled = amountOffLevel < LEVEL_THRESHOLD;
+            boolean leveled = amountOffLevel < mTolerance;
             if (!leveled) {
-                /* TODO we need to change the vibration frequency dynamically, but this isn't so easy :)
-                if (mIsVibrating) {
-                    mVibrator.cancel();
-                }
-                int vibrationPause = (int) Math.max(20, (FREQUENCY_HIGH * Math.min(1f, amountOffLevel / 3f)));
-                */
-                if (!mIsVibrating) {
-                    int vibrationPause = FREQUENCY_MID;
-                    mIsVibrating = true;
-                    mVibrator.vibrate(new long[]{0, 20, vibrationPause}, 0);
-                }
+                mVibrationWrapper.start();
             } else {
-                mIsVibrating = false;
-                mVibrator.cancel();
+                mVibrationWrapper.stop();
             }
         }
 
@@ -119,7 +106,10 @@ public class LevelizerService extends Service {
         // Start this service in the foreground on the notification
         startForeground(NOTIFICATION_ID, notification);
 
-        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mTolerance = Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3) * DEGREES_RATIO;
+
+        mVibrationWrapper = new VibrationWrapper(this);
+
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -147,9 +137,7 @@ public class LevelizerService extends Service {
             sensorManager.unregisterListener(mSensorEventListener);
         }
 
-        if (mVibrator != null) {
-            mVibrator.cancel();
-        }
+        mVibrationWrapper.stop();
 
         super.onDestroy();
     }

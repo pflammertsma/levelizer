@@ -30,4 +30,16 @@
 
     <style name="Button.Borderless" parent="@style/Widget.AppCompat.Button.Borderless"/>
 
+    <style name="DiscreteSeekBar" parent="@style/Widget.DiscreteSeekBar">
+        <item name="dsb_indicatorColor">@color/colorPrimaryDark</item>
+        <item name="dsb_indicatorElevation">16dp</item>
+        <item name="dsb_indicatorPopupEnabled">false</item>
+        <item name="dsb_progressColor">@color/colorPrimaryDark</item>
+        <item name="dsb_rippleColor">@color/colorPrimaryDarkDim</item>
+        <item name="dsb_scrubberHeight">4dp</item>
+        <item name="dsb_thumbSize">20dp</item>
+        <item name="dsb_trackColor">#80808080</item>
+        <item name="dsb_trackHeight">1dp</item>
+    </style>
+
 </resources>
