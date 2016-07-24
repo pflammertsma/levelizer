@@ -9,6 +9,11 @@
     <string name="about_title">About Levelizer</string>
     <string name="about_action">About</string>
     <string name="about_description">Levelizer aides you in taking level photos through haptic feedback. When using your favorite camera app, Levelizer will gently buzz until you\'re holding your phone straight.</string>
+    <string name="about_contributors">Contributors</string>
+    <string name="about_libraries">Libraries</string>
+    <string name="about_source">Source</string>
+    <string name="about_version">Version</string>
+    <string name="version">%1$s(r%2$d)</string>
 
     <string name="onboarding_title">Onboarding</string>
     <string name="onboarding_all_done">All done!</string>
@@ -41,7 +46,6 @@
     <string name="not_installed">This app is not installed</string>
     <string name="no_apps_found">No apps found.</string>
     <string name="app_list">App list</string>
-    <string name="contributors">Contributors</string>
 
     <string name="add_app_explanation">Select one of the following apps that uses the camera permission:</string>
     <string name="install">Install app</string>
