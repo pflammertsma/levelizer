@@ -55,10 +55,15 @@ public class AddAppDialogFragment extends DialogFragment {
         ButterKnife.bind(this, view);
 
         List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(
-                getActivity().getPackageManager(), new String[]{Manifest.permission.CAMERA});
+                getContext(), new String[]{Manifest.permission.CAMERA});
 
         AppsListAdapter adapter = new AppsListAdapter(getActivity());
-        adapter.setData(apps);
+        if (apps == null) {
+            mListEmpty.setText(R.string.app_list_denied);
+        } else {
+            mListEmpty.setText(R.string.app_list_empty);
+            adapter.setData(apps);
+        }
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,6 +73,7 @@ public class AddAppDialogFragment extends DialogFragment {
                 getDialog().dismiss();
             }
         });
+        mListEmpty.setVisibility(adapter.getCount() == 0 ? View.VISIBLE : View.GONE);
 
         return view;
     }
