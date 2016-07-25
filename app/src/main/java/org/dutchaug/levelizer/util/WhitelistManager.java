@@ -27,6 +27,8 @@ public class WhitelistManager {
             "com.sec.android.app.camera",
             "com.htc.camera",
             "com.huawei.camera",
+            "com.sonyericsson.android.camera",
+            "com.sonyericsson.android.camera3d",
             "com.cyngn.cameranext",
             "com.sec.android.app.camera",
             // Popular third-party cameras
@@ -36,6 +38,10 @@ public class WhitelistManager {
             "com.flavionet.android.camera.pro",
             "net.sourceforge.opencamera",
             "com.camtechstudio.lumiocam",
+            "com.hecorat.camera",
+            "slide.cameraZoom",
+            "slide.camZoomFree",
+            "com.perracolabs.cp",
             };
 
     private static Set<String> sWhitelist;

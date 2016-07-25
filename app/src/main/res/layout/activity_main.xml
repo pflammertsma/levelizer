@@ -2,6 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
@@ -19,6 +20,7 @@
         <android.support.v4.widget.Space
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"/>
 
         <android.support.v7.widget.CardView
@@ -52,22 +54,76 @@
                     android:layout_height="wrap_content"
                     android:text="@string/accessibility_enable"/>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/tv_toggle"
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/sw_toggle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="Levelizer is currently enabled."
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-                    android:visibility="gone"/>
+                    android:padding="8dp"
+                    android:text="@string/enable"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/bt_toggle"
-                    style="@style/Button.Borderless"
+                <LinearLayout
+                    android:id="@+id/vg_vibration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Disable"
-                    android:visibility="gone"/>
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/tv_vibration"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/vibration_value"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
+
+                    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                        android:id="@+id/dsb_vibration"
+                        style="@style/DiscreteSeekBar"
+                        android:layout_width="144dp"
+                        android:layout_height="wrap_content"
+                        app:dsb_max="3"
+                        app:dsb_min="1"
+                        app:dsb_value="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/vg_tolerance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/tv_tolerance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:text="@string/tolerance_value"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
+
+                    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                        android:id="@+id/dsb_tolerance"
+                        style="@style/DiscreteSeekBar"
+                        android:layout_width="144dp"
+                        android:layout_height="wrap_content"
+                        app:dsb_max="10"
+                        app:dsb_min="1"
+                        app:dsb_value="3"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

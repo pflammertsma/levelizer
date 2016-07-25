@@ -1,9 +1,14 @@
 package org.dutchaug.levelizer.util;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,19 +20,29 @@ public abstract class PackageUtils {
 
     private static final String TAG = PackageUtils.class.getSimpleName();
 
-    @NonNull
-    public static List<PackageInfo> getPackagesHoldingPermissions(PackageManager packageManager, String[] permissions) {
+    @Nullable
+    public static List<PackageInfo> getPackagesHoldingPermissions(@NonNull Context context, @NonNull String[] permissions) {
+        PackageManager packageManager = context.getPackageManager();
+        List<PackageInfo> apps = new ArrayList<>();
         //Get a list of installed apps, that have camera permission
         List<PackageInfo> packagesHoldingPermissions;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            packagesHoldingPermissions = packageManager.getPackagesHoldingPermissions(permissions, 0);
-        } else {
-            packagesHoldingPermissions = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                packagesHoldingPermissions = packageManager.getPackagesHoldingPermissions(permissions, 0);
+            } else {
+                packagesHoldingPermissions = packageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+            }
+        } catch (NullPointerException e) {
+            // Xposed framework can throw an NPE here
+            Crashlytics.logException(e);
+            return null;
         }
-        List<PackageInfo> apps = new ArrayList<>();
         for (PackageInfo pkg : packagesHoldingPermissions) {
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 int permissionsMissing = permissions.length;
+                if (pkg == null) {
+                    continue;
+                }
                 for (String permissionA : pkg.requestedPermissions) {
                     for (String permissionB : permissions) {
                         if (permissionA.equals(permissionB)) {
