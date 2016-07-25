@@ -28,6 +28,9 @@ public abstract class PackageUtils {
         for (PackageInfo pkg : packagesHoldingPermissions) {
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 int permissionsMissing = permissions.length;
+                if (pkg == null) {
+                    continue;
+                }
                 for (String permissionA : pkg.requestedPermissions) {
                     for (String permissionB : permissions) {
                         if (permissionA.equals(permissionB)) {
