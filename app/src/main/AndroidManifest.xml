@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:name=".LevelizerApp"
@@ -26,6 +26,7 @@
         <activity
             android:name=".activities.AboutActivity"
             android:label="@string/about_title"/>
+
         <activity-alias
             android:name=".OnboardingActivity"
             android:targetActivity=".activities.MainActivity"/>
@@ -47,6 +48,13 @@
             android:name="io.fabric.ApiKey"
             android:value="360de4072a81372f1ef315f1854dab7cb020678f"/>
 
+        <activity android:name=".activities.TestArrowActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

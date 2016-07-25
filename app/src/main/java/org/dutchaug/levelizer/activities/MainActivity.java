@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
         AccessibilityManager accessibilityService = (AccessibilityManager)
                 getSystemService(Context.ACCESSIBILITY_SERVICE);
         if (accessibilityService != null) {
-            List<AccessibilityServiceInfo> services =
+            List<AccessibilityServiceInfo> infos =
                     accessibilityService.getEnabledAccessibilityServiceList(
                             AccessibilityServiceInfo.FEEDBACK_HAPTIC);
             String packageName = getPackageName() + "/";
@@ -249,8 +249,6 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
     }
 
     private void onAccessibilityStatus(boolean serviceEnabled) {
-        mBtService.setText(serviceEnabled ? R.string.onboarding_all_done : R.string.enable_service);
-        mBtService.setEnabled(!serviceEnabled);
         if (serviceEnabled) {
             Animation animation = mCvService.getAnimation();
             if (animation != null) {
