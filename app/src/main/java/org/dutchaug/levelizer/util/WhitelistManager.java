@@ -21,16 +21,17 @@ public class WhitelistManager {
     private static final String[] CAMERA_APPS_ARRAY = new String[]{
             // Pre-installed cameras
             "com.android.camera",
-            "com.motorola.camera",
-            "com.motorola.cameraone",
-            "com.lge.camera",
             "com.sec.android.app.camera",
             "com.htc.camera",
+            "com.motorola.camera",
+            "com.motorola.cameraone",
+            "com.lenovo.scg",
+            "com.lge.camera",
             "com.huawei.camera",
             "com.sonyericsson.android.camera",
             "com.sonyericsson.android.camera3d",
             "com.cyngn.cameranext",
-            "com.sec.android.app.camera",
+            "org.cyanogenmod.snap",
             // Popular third-party cameras
             "com.google.android.GoogleCamera",
             "com.google.vr.cyclops",
