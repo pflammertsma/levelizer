@@ -16,27 +16,28 @@ public abstract class LevelizerListener implements SensorEventListener {
 
     private static final int GRAVITY_THRESHOLD = 2;
 
-    private float mTolerance;
+    private Context mContext;
+    private int mRotation;
 
-    private float[] mGravity, mGeomagnetic;
+    float mR[] = new float[16];
+    float mOrientation[] = new float[3];
+
+    private float mTolerance;
 
     public LevelizerListener() {
     }
 
-    public void start(@NonNull Context context) {
+    public void start(@NonNull Context context, int rotation) {
+        mContext = context;
+        mRotation = rotation;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
-            Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
             if (rotationSensor != null) {
                 sensorManager.registerListener(this, rotationSensor,
                                                SensorManager.SENSOR_DELAY_NORMAL);
             } else {
                 // TODO show an error??
-            }
-            Sensor magneticSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-            if (magneticSensor != null) {
-                sensorManager.registerListener(this, magneticSensor,
-                                               SensorManager.SENSOR_DELAY_NORMAL);
             }
         }
     }
@@ -51,42 +52,36 @@ public abstract class LevelizerListener implements SensorEventListener {
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float amountOffLevel = 0f;
         if (BuildConfig.DEBUG_LOG) {
             // FIXME display less frequently, say once a second
             Log.d(TAG, String.format("%.4f, %.4f, %.4f", event.values[0], event.values[1], event.values[2]));
         }
-        // check which axis we need to investigate (one has ~9.81 and has ~0)
-        if (Math.abs(event.values[1]) > GRAVITY_THRESHOLD) {
-            // This suggests axis with index 1 is pointing down
-            amountOffLevel = Math.abs(event.values[0]);
-        } else if (Math.abs(event.values[0]) > GRAVITY_THRESHOLD) {
-            // This suggests axis with index 0 is pointing down
-            amountOffLevel = Math.abs(event.values[1]);
-        }
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-            mGravity = event.values;
-        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
-            mGeomagnetic = event.values;
-        float azimut = 0, pitch = 0, roll = 0;
-        if (mGravity != null && mGeomagnetic != null) {
-            float R[] = new float[9];
-            float I[] = new float[9];
-            boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-            if (success) {
-                float orientation[] = new float[3];
-                SensorManager.getOrientation(R, orientation);
-                azimut = orientation[0]; // orientation contains: azimut, pitch and roll
-                pitch = orientation[1];
-                roll = orientation[2];
+        // It is good practice to check that we received the proper sensor event
+        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+            // Convert the rotation-vector to a 4x4 matrix.
+            SensorManager.getRotationMatrixFromVector(mR,
+                                                      event.values);
+            SensorManager.remapCoordinateSystem(mR,
+                                                SensorManager.AXIS_X, SensorManager.AXIS_Z,
+                                                mR);
+            SensorManager.getOrientation(mR, mOrientation);
+
+            // Optionally convert the result from radians to degrees
+            double yaw = Math.toDegrees(mOrientation[0]);
+            double pitch = Math.toDegrees(mOrientation[1]);
+            double roll = Math.toDegrees(mOrientation[2]);
+            if (pitch > 70 || pitch < -70) {
+                onOrientationUnreliable();
+            } else {
+                onOrientation(yaw, pitch, roll);
+                double amountOffLevel = roll % 90;
+                onOrientation(amountOffLevel);
+                if (Math.abs(amountOffLevel) < mTolerance) {
+                    onLevel();
+                } else {
+                    onUnlevel();
+                }
             }
-        }
-        boolean leveled = amountOffLevel < mTolerance;
-        onOrientation(azimut, pitch, roll);
-        if (leveled) {
-            onLevel();
-        } else {
-            onUnlevel();
         }
     }
 
@@ -98,7 +93,11 @@ public abstract class LevelizerListener implements SensorEventListener {
         mTolerance = tolerance;
     }
 
-    protected abstract void onOrientation(float azimut, float pitch, float roll);
+    protected abstract void onOrientation(double yaw, double pitch, double roll);
+
+    protected abstract void onOrientation(double angleOffLevel);
+
+    protected abstract void onOrientationUnreliable();
 
     protected abstract void onLevel();
 

@@ -18,7 +18,8 @@ public class LevelView extends View {
     private Paint mPaintGood, mPaintBad, mPaintBadThin;
     private Paint mPaintGoodBg, mPaintBadBg;
 
-    private float mOrientation, mTolerance;
+    private double mOrientation, mTolerance;
+    private boolean mActive;
 
     public LevelView(Context context) {
         super(context);
@@ -71,25 +72,27 @@ public class LevelView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.save();
-        int width = getWidth();
-        int height = getHeight();
-        canvas.rotate(mOrientation, width * .5f, height * .5f);
-        Paint paint = mPaintGood, paintBg = mPaintGoodBg;
-        if (mOrientation > mTolerance) {
-            paint = mPaintBad;
-            paintBg = mPaintBadBg;
-            canvas.drawLine(width * .2f, height * .5f, width * .8f, height * .5f, mPaintBadThin);
+        if (mActive) {
+            canvas.save();
+            int width = getWidth();
+            int height = getHeight();
+            canvas.rotate((float) mOrientation, width * .5f, height * .5f);
+            Paint paint = mPaintGood, paintBg = mPaintGoodBg;
+            if (Math.abs(mOrientation) > mTolerance) {
+                paint = mPaintBad;
+                paintBg = mPaintBadBg;
+                canvas.drawLine(width * .2f, height * .5f, width * .8f, height * .5f, mPaintBadThin);
+            }
+            canvas.drawLine(width * .1f, height * .5f, width * .2f, height * .5f, paintBg);
+            canvas.drawLine(width * .1f, height * .5f, width * .2f, height * .5f, paint);
+            canvas.drawLine(width * .8f, height * .5f, width * .9f, height * .5f, paintBg);
+            canvas.drawLine(width * .8f, height * .5f, width * .9f, height * .5f, paint);
+            canvas.restore();
         }
-        canvas.drawLine(width * .1f, height * .5f, width * .2f, height * .5f, paintBg);
-        canvas.drawLine(width * .1f, height * .5f, width * .2f, height * .5f, paint);
-        canvas.drawLine(width * .8f, height * .5f, width * .9f, height * .5f, paintBg);
-        canvas.drawLine(width * .8f, height * .5f, width * .9f, height * .5f, paint);
-        canvas.restore();
     }
 
     @SuppressWarnings("unused")
-    public void setOrientation(float orientation) {
+    public void setOrientation(double orientation) {
         mOrientation = orientation;
         invalidate();
     }
@@ -97,6 +100,11 @@ public class LevelView extends View {
     @SuppressWarnings("unused")
     public void setTolerance(float tolerance) {
         mTolerance = tolerance;
+        invalidate();
+    }
+
+    public void setActive(boolean active) {
+        mActive = active;
         invalidate();
     }
 

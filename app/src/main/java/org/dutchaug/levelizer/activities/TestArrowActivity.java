@@ -3,7 +3,6 @@ package org.dutchaug.levelizer.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.dutchaug.levelizer.R;
 import org.dutchaug.levelizer.services.LevelizerListener;
@@ -25,9 +24,19 @@ public class TestArrowActivity extends AppCompatActivity {
     private LevelizerListener mLevelizerListener = new LevelizerListener() {
 
         @Override
-        protected void onOrientation(float azimut, float pitch, float roll) {
-            mTvValues.setText(String.format(Locale.getDefault(), "%f \t%f \t%f", azimut, pitch, roll));
-            mLvIndicator.setOrientation(roll);
+        protected void onOrientation(double yaw, double pitch, double roll) {
+            mTvValues.setText(String.format(Locale.getDefault(), "%f \t%f \t%f", yaw, pitch, roll));
+        }
+
+        @Override
+        protected void onOrientation(double angleOffLevel) {
+            mLvIndicator.setActive(true);
+            mLvIndicator.setOrientation(-angleOffLevel);
+        }
+
+        @Override
+        protected void onOrientationUnreliable() {
+            mLvIndicator.setActive(false);
         }
 
         @Override
@@ -53,7 +62,7 @@ public class TestArrowActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mLevelizerListener.start(this);
+        mLevelizerListener.start(this, getWindowManager().getDefaultDisplay().getRotation());
     }
 
     @Override

@@ -3,13 +3,9 @@ package org.dutchaug.levelizer.services;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -17,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.view.Gravity;
+import android.view.Surface;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -49,8 +46,19 @@ public class LevelizerService extends Service {
     private LevelizerListener mLevelizerListener = new LevelizerListener() {
 
         @Override
-        protected void onOrientation(float azimut, float pitch, float roll) {
+        protected void onOrientation(double yaw, double pitch, double roll) {
             // Do nothing
+        }
+
+        @Override
+        protected void onOrientation(double angleOffLevel) {
+            // Do nothing
+        }
+
+        @Override
+        protected void onOrientationUnreliable() {
+            // Stop giving feedback
+            onLevel();
         }
 
         @Override
@@ -104,7 +112,7 @@ public class LevelizerService extends Service {
         mVibrationWrapper = new VibrationWrapper(this);
 
         mLevelizerListener.setTolerance(Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3) * DEGREES_RATIO);
-        mLevelizerListener.start(this);
+        mLevelizerListener.start(this, Surface.ROTATION_0);
 
         mOverlayView = new FrameLayout(this);
         TextView textView = new TextView(this);
