@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -39,11 +37,8 @@ public class LevelizerService extends Service {
     private static final int NOTIFICATION_ID = 1;
 
     private static final float DEGREES_RATIO = 0.2f;
-    private static final int GRAVITY_THRESHOLD = 2;
 
     private static final String EXTRA_STOP = "stop";
-
-    private float mTolerance;
 
     private VibrationWrapper mVibrationWrapper;
 
@@ -51,34 +46,21 @@ public class LevelizerService extends Service {
 
     private ViewGroup mOverlayView;
 
-    private SensorEventListener mSensorEventListener = new SensorEventListener() {
+    private LevelizerListener mLevelizerListener = new LevelizerListener() {
 
-        @SuppressWarnings("SimplifiableIfStatement")
         @Override
-        public void onSensorChanged(SensorEvent sensorEvent) {
-            float amountOffLevel = 0f;
-            if (BuildConfig.DEBUG_LOG) {
-                // FIXME display less frequently, say once a second
-                Log.d(TAG, String.format("%.4f, %.4f, %.4f", sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2]));
-            }
-            // check which axis we need to investigate (one has ~9.81 and has ~0)
-            if (Math.abs(sensorEvent.values[1]) > GRAVITY_THRESHOLD) {
-                // This suggests axis with index 1 is pointing down
-                amountOffLevel = Math.abs(sensorEvent.values[0]);
-            } else if (Math.abs(sensorEvent.values[0]) > GRAVITY_THRESHOLD) {
-                // This suggests axis with index 0 is pointing down
-                amountOffLevel = Math.abs(sensorEvent.values[1]);
-            }
-            boolean leveled = amountOffLevel < mTolerance;
-            if (!leveled) {
-                mVibrationWrapper.start();
-            } else {
-                mVibrationWrapper.stop();
-            }
+        protected void onOrientation(float azimut, float pitch, float roll) {
+            // Do nothing
         }
 
         @Override
-        public void onAccuracyChanged(Sensor sensor, int i) {
+        protected void onLevel() {
+            mVibrationWrapper.stop();
+        }
+
+        @Override
+        protected void onUnlevel() {
+            mVibrationWrapper.start();
         }
 
     };
@@ -119,20 +101,10 @@ public class LevelizerService extends Service {
         // Start this service in the foreground on the notification
         startForeground(NOTIFICATION_ID, notification);
 
-        mTolerance = Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3) * DEGREES_RATIO;
-
         mVibrationWrapper = new VibrationWrapper(this);
 
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager != null) {
-            Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-            if (rotationSensor != null) {
-                sensorManager.registerListener(mSensorEventListener, rotationSensor,
-                                               SensorManager.SENSOR_DELAY_NORMAL);
-            } else {
-                // TODO show an error??
-            }
-        }
+        mLevelizerListener.setTolerance(Prefs.getInt(CameraDetectionService.PREF_TOLERANCE, 3) * DEGREES_RATIO);
+        mLevelizerListener.start(this);
 
         mOverlayView = new FrameLayout(this);
         TextView textView = new TextView(this);
@@ -167,10 +139,7 @@ public class LevelizerService extends Service {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.cancel(NOTIFICATION_ID);
 
-        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager != null) {
-            sensorManager.unregisterListener(mSensorEventListener);
-        }
+        mLevelizerListener.stop(this);
 
         if (mWindowManager != null) {
             mWindowManager.removeView(mOverlayView);

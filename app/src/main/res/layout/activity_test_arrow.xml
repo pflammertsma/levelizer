@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     android:id="@+id/activity_test_arrow"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.dutchaug.levelizer.activities.TestArrowActivity"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context="org.dutchaug.levelizer.activities.TestArrowActivity">
 
-    <org.dutchaug.levelizer.views.ArrowView
+    <TextView
+        android:id="@+id/tv_values"
         android:layout_width="match_parent"
-        app:orientation="90"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Sensor values"/>
 
-</LinearLayout>
+    <org.dutchaug.levelizer.views.LevelView
+        android:id="@+id/lv_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:orientation="5"
+        app:tolerance="3"/>
+
+</FrameLayout>

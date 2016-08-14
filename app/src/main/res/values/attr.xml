@@ -3,6 +3,7 @@
 
     <declare-styleable name="ArrowView">
         <attr name="orientation" format="float"/>
+        <attr name="tolerance" format="float"/>
     </declare-styleable>
 
 </resources>

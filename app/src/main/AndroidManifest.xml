@@ -48,7 +48,9 @@
             android:name="io.fabric.ApiKey"
             android:value="360de4072a81372f1ef315f1854dab7cb020678f"/>
 
-        <activity android:name=".activities.TestArrowActivity">
+        <activity
+            android:name=".activities.TestArrowActivity"
+            android:label="Levelizer Test">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
