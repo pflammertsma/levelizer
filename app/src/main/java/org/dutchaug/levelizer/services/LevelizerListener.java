@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.Surface;
 
 import org.dutchaug.levelizer.BuildConfig;
 
@@ -61,9 +62,32 @@ public abstract class LevelizerListener implements SensorEventListener {
             // Convert the rotation-vector to a 4x4 matrix.
             SensorManager.getRotationMatrixFromVector(mR,
                                                       event.values);
-            SensorManager.remapCoordinateSystem(mR,
-                                                SensorManager.AXIS_X, SensorManager.AXIS_Z,
-                                                mR);
+            switch (mRotation) {
+                case Surface.ROTATION_0:
+                    SensorManager.remapCoordinateSystem(mR,
+                                                        SensorManager.AXIS_X,
+                                                        SensorManager.AXIS_Z,
+                                                        mR);
+                    break;
+                case Surface.ROTATION_90:
+                    SensorManager.remapCoordinateSystem(mR,
+                                                        SensorManager.AXIS_Z,
+                                                        SensorManager.AXIS_MINUS_X,
+                                                        mR);
+                    break;
+                case Surface.ROTATION_180:
+                    SensorManager.remapCoordinateSystem(mR,
+                                                        SensorManager.AXIS_MINUS_X,
+                                                        SensorManager.AXIS_MINUS_Z,
+                                                        mR);
+                    break;
+                case Surface.ROTATION_270:
+                    SensorManager.remapCoordinateSystem(mR,
+                                                        SensorManager.AXIS_MINUS_Z,
+                                                        SensorManager.AXIS_X,
+                                                        mR);
+                    break;
+            }
             SensorManager.getOrientation(mR, mOrientation);
 
             // Optionally convert the result from radians to degrees
