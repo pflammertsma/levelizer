@@ -35,15 +35,11 @@ android {
         }
         release {
             Properties props = new Properties()
-            try {
-                props.load(new FileInputStream(".signing/release.properties"))
-                storeFile file('../.signing/release.jks')
-                storePassword(props['RELEASE_STORE_PASSWORD'])
-                keyAlias(props['RELEASE_KEY_ALIAS'])
-                keyPassword(props['RELEASE_KEY_PASSWORD'])
-            } catch (IOException e) {
-                // Ignore
-            }
+            props.load(new FileInputStream(".signing/release.properties"))
+            storeFile file('../.signing/release.jks')
+            storePassword(props['RELEASE_STORE_PASSWORD'])
+            keyAlias(props['RELEASE_KEY_ALIAS'])
+            keyPassword(props['RELEASE_KEY_PASSWORD'])
         }
     }
     compileSdkVersion 28

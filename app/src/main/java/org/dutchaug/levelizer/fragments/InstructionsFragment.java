@@ -64,16 +64,6 @@ public class InstructionsFragment extends DialogFragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-    }
-
     @OnClick(R.id.bt_continue)
     protected void onClickContinue() {
         if (mViewSwitcher.getDisplayedChild() == mViewSwitcher.getChildCount() - 1) {

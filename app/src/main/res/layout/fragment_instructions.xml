@@ -1,88 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/dialogBackground"
     android:orientation="vertical">
 
     <ScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <ViewSwitcher
             android:id="@+id/flipper"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inAnimation="@anim/slide_in_right"
             android:outAnimation="@anim/slide_out_left">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/dialogBackground"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="@dimen/instruction_width"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/instruction_height"
                     android:layout_gravity="center_horizontal"
                     android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/im_instruction1"
-                    tools:ignore="ContentDescription"/>
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/instruction1"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/dialogBackground"
                 android:orientation="vertical">
 
                 <FrameLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/iv_instruction2a"
-                        android:layout_width="@dimen/instruction_width"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/instruction_height"
+                        android:layout_gravity="center_horizontal"
                         android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/im_instruction2"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                     <ImageView
                         android:id="@+id/iv_instruction2b"
-                        android:layout_width="@dimen/instruction_width"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/instruction_height"
+                        android:layout_gravity="center_horizontal"
                         android:adjustViewBounds="true"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/im_instruction3"
                         android:visibility="invisible"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                 </FrameLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/instruction2"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"/>
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1" />
 
             </LinearLayout>
 
@@ -97,6 +101,6 @@
         android:layout_height="48dp"
         android:layout_gravity="end"
         android:layout_margin="8dp"
-        android:text="@string/instructions_continue"/>
+        android:text="@string/instructions_continue" />
 
 </LinearLayout>
