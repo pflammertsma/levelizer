@@ -308,6 +308,9 @@ public class MainActivity extends AppCompatActivity implements InstructionsFragm
             case 3:
                 vibrationStrength = R.string.vibration_3;
                 break;
+            case 4:
+                vibrationStrength = R.string.vibration_4;
+                break;
         }
         mTvVibration.setText(getString(R.string.vibration_value, getString(vibrationStrength)));
         int oldValue = Prefs.getInt(CameraDetectionService.PREF_VIBRATION, 1);

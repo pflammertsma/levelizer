@@ -41,6 +41,10 @@ public class VibrationWrapper {
                 mVibrationDuration = 80;
                 mVibrationPause = 500;
                 break;
+            case 4:
+                mVibrationDuration = 160;
+                mVibrationPause = 600;
+                break;
         }
     }
 

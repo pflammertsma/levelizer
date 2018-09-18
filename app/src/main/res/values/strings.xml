@@ -29,6 +29,7 @@
     <string name="vibration_1">low</string>
     <string name="vibration_2">medium</string>
     <string name="vibration_3">high</string>
+    <string name="vibration_4">extreme</string>
 
     <string name="tolerance_value">Tolerance: <xliff:g example="3" id="degrees">%1$d</xliff:g>°</string>
 
