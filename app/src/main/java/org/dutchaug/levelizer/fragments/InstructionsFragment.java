@@ -58,7 +58,7 @@ public class InstructionsFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_instructions, null, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_instructions, null, false);
         ButterKnife.bind(this, view);
 
         return view;

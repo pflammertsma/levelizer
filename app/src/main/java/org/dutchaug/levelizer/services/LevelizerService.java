@@ -1,6 +1,8 @@
 package org.dutchaug.levelizer.services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -9,6 +11,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -31,6 +34,8 @@ public class LevelizerService extends Service {
 
     private static final float DEGREES_RATIO = 0.2f;
     private static final int GRAVITY_THRESHOLD = 2;
+
+    private static final String CHANNEL_ID = "ID_LEVELIZATION";
 
     private static final String EXTRA_STOP = "stop";
 
@@ -87,6 +92,18 @@ public class LevelizerService extends Service {
             Toast.makeText(this, "Levelizer started", Toast.LENGTH_SHORT).show();
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
         // Display an ongoing notification
         Intent intent = new Intent(this, LevelizerService.class);
         intent.putExtra(EXTRA_STOP, true);
@@ -98,6 +115,7 @@ public class LevelizerService extends Service {
                 .setContentText(getString(R.string.notification_text))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setOngoing(true)
+                .setChannelId(CHANNEL_ID)
                 .build();
         // Display the notification
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);

@@ -51,11 +51,11 @@ public class AddAppDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_app_list, container, true);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_app_list, container, true);
         ButterKnife.bind(this, view);
 
         List<PackageInfo> apps = PackageUtils.getPackagesHoldingPermissions(
-                getContext(), new String[]{Manifest.permission.CAMERA});
+                getActivity(), new String[]{Manifest.permission.CAMERA});
 
         AppsListAdapter adapter = new AppsListAdapter(getActivity());
         if (apps == null) {
@@ -69,7 +69,7 @@ public class AddAppDialogFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PackageInfo packageInfo = (PackageInfo) adapterView.getAdapter().getItem(i);
-                WhitelistManager.add(getContext(), packageInfo);
+                WhitelistManager.add(getActivity(), packageInfo);
                 getDialog().dismiss();
             }
         });

@@ -71,13 +71,13 @@ public class AppContextDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPackageManager = getContext().getPackageManager();
+        mPackageManager = getActivity().getPackageManager();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_app_context, container, true);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_app_context, container, true);
         ButterKnife.bind(this, view);
 
         final String packageName = getArguments().getString(KEY_PACKAGE_NAME);
@@ -119,7 +119,7 @@ public class AppContextDialogFragment extends DialogFragment {
         }
 
         BaseAdapter adapter = new ArrayAdapter<String>(
-                getContext(), android.R.layout.simple_list_item_1, new String[]{
+                getActivity(), android.R.layout.simple_list_item_1, new String[]{
                 packageInfo == null ? getString(R.string.install) : getString(R.string.launch),
                 getString(R.string.remove)
         }) {
@@ -174,7 +174,7 @@ public class AppContextDialogFragment extends DialogFragment {
                         dismiss();
                         break;
                     case 1:
-                        WhitelistManager.remove(getContext(), packageName);
+                        WhitelistManager.remove(getActivity(), packageName);
                         dismiss();
                         break;
                 }

@@ -52,4 +52,6 @@
     <string name="install">Install app</string>
     <string name="launch">Launch app</string>
     <string name="remove">Remove from whitelist</string>
+    <string name="channel_name">Levelization</string>
+    <string name="channel_description">Ongoing notification while levelization is running</string>
 </resources>
