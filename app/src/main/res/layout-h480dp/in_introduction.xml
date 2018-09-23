@@ -9,13 +9,13 @@
     tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="wrap_content"
-        android:layout_height="128dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_launcher_large"
+        android:src="@drawable/device_frame_bzzt"
         tools:ignore="ContentDescription,RtlHardcoded"/>
 
     <android.support.v7.widget.AppCompatTextView

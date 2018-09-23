@@ -14,7 +14,7 @@
         android:layout_marginRight="16dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_launcher_large"
+        android:src="@drawable/device_frame_bzzt"
         tools:ignore="ContentDescription,RtlHardcoded"/>
 
     <android.support.v7.widget.AppCompatTextView
