@@ -48,8 +48,8 @@ android {
         targetSdkVersion 28
 
         applicationId "org.dutchaug.levelizer"
-        versionCode 8
-        versionName "1.1.2"
+        versionCode 9
+        versionName "1.1.3"
 
         vectorDrawables.useSupportLibrary = true
 
